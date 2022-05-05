@@ -26,18 +26,23 @@ from conf import settings
 from utils import get_network, get_training_dataloader, get_test_dataloader, WarmUpLR, \
     most_recent_folder, most_recent_weights, last_epoch, best_acc_weights
 
-def train(cifar100_training_loader, warmup_scheduler, epoch):
+def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
 
     start = time.time()
     net.train()
     for batch_index, (images, labels) in enumerate(cifar100_training_loader):
-
-        if args.gpu:
+        labs=labels
+        
+        if args.gpu:        
             labels = labels.cuda()
             images = images.cuda()
 
         optimizer.zero_grad()
         outputs = net(images)
+        print('labels:', labs)
+        print('outputs:', outputs)
+        print('labels type:', type(labs))
+        input()
         loss = loss_function(outputs, labels)
         wandb.log({"loss": loss})
         loss.backward()
@@ -215,7 +220,7 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler2, epoch)
+        train(cifar100_training_loader2, warmup_scheduler2, epoch, True)
         acc = eval_training(epoch)
         wandb.log({"accuracy": acc})
 
