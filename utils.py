@@ -185,10 +185,22 @@ def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=Tru
     ])
     #cifar100_training = CIFAR100Train(path, transform=transform_train)
     cifar100_training = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform_train)
+    
+    #sav begin:
+    cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [10000, 40000], generator=torch.Generator().manual_seed(0))
+    print('First dataset size:', len(cifar100_trainset1))
+    print('Second dataset size:', len(cifar100_trainset2))
+    
+    cifar100_training_loader1 = DataLoader(
+        cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    cifar100_training_loader2 = DataLoader(
+        cifar100_trainset2, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    
     cifar100_training_loader = DataLoader(
         cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
-    return cifar100_training_loader
+    #return cifar100_training_loader
+    return cifar100_training_loader1, cifar100_training_loader2
 
 def get_test_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader
