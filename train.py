@@ -124,7 +124,7 @@ def eval_training(epoch=0, tb=True):
 
 if __name__ == '__main__':
 
-    wandb.init(project="base10K", entity="hierarchical_classification")
+    wandb.init(project="two_steps", entity="hierarchical_classification")
     wandb.config = {"epochs": 200, "batch_size": 128}
     
     parser = argparse.ArgumentParser()
