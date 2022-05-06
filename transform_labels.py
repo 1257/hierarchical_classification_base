@@ -1,53 +1,55 @@
 def my_entropy(outputs, labels):
     coarse = []
-    real_superclass = [0]*20
-    ind=labels.index(1)
-    if ind in [72, 4, 95, 30, 55]:
-        real_superclass[0]=1
-    elif ind in [73, 32, 67, 91, 1]:
-        real_superclass[1]=1
-    elif ind in [92, 70, 82, 54, 62]:
-        real_superclass[2]=1
-    elif ind in [16, 61, 9, 10, 28]:
-        real_superclass[3]=1
-    elif ind in [51, 0, 53, 57, 83]:
-        real_superclass[4]=1
-    elif ind in [40, 39, 22, 87, 86]:
-        real_superclass[5]=1
-    elif ind in [20, 25, 94, 84, 5]:
-        real_superclass[6]=1
-    elif ind in [14, 24, 6, 7, 18]:
-        real_superclass[7]=1
-    elif ind in [43, 97, 42, 3, 88]:
-        real_superclass[8]=1
-    elif ind in [37, 17, 76, 12, 68]:
-        real_superclass[9]=1
-    elif ind in [49, 33, 71, 23, 60]:
-        real_superclass[10]=1
-    elif ind in [15, 21, 19, 31, 38]:
-        real_superclass[11]=1
-    elif ind in [75, 63, 64, 66, 34]:
-        real_superclass[12]=1
-    elif ind in [77, 26, 45, 99, 79]:
-        real_superclass[13]=1
-    elif ind in [11, 2, 35, 46, 98]:
-        real_superclass[14]=1
-    elif ind in [29, 93, 27, 78, 44]:
-        real_superclass[15]=1
-    elif ind in [65, 50, 74, 36, 80]:
-        real_superclass[16]=1
-    elif ind in [56, 52, 59, 47, 96]:
-        real_superclass[17]=1
-    elif ind in [8, 58, 90, 13, 48]:
-        real_superclass[18]=1
-    elif ind in [81, 69, 41, 89, 85]:
-        real_superclass[19]=1
+    real_superclass = []*128
+    
 
     for i in range(128):
         coarse.append([])
+        ind=labels[i]
+        if (ind in [72, 4, 95, 30, 55]):
+          real_superclass[i]=0
+        elif ind in [73, 32, 67, 91, 1]:
+          real_superclass[i]=1
+        elif ind in [92, 70, 82, 54, 62]:
+          real_superclass[i]=2
+        elif ind in [16, 61, 9, 10, 28]:
+          real_superclass[i]=3
+        elif ind in [51, 0, 53, 57, 83]:
+          real_superclass[i]=4
+        elif ind in [40, 39, 22, 87, 86]:
+          real_superclass[i]=5
+        elif ind in [20, 25, 94, 84, 5]:
+          real_superclass[i]=6
+        elif ind in [14, 24, 6, 7, 18]:
+          real_superclass[i]=7
+        elif ind in [43, 97, 42, 3, 88]:
+          real_superclass[i]=8
+        elif ind in [37, 17, 76, 12, 68]:
+          real_superclass[i]=9
+        elif ind in [49, 33, 71, 23, 60]:
+          real_superclass[i]=10
+        elif ind in [15, 21, 19, 31, 38]:
+          real_superclass[i]=11
+        elif ind in [75, 63, 64, 66, 34]:
+          real_superclass[i]=12
+        elif ind in [77, 26, 45, 99, 79]:
+          real_superclass[i]=13
+        elif ind in [11, 2, 35, 46, 98]:
+          real_superclass[i]=14
+        elif ind in [29, 93, 27, 78, 44]:
+          real_superclass[i]=15
+        elif ind in [65, 50, 74, 36, 80]:
+          real_superclass[i]=16
+        elif ind in [56, 52, 59, 47, 96]:
+          real_superclass[i]=17
+        elif ind in [8, 58, 90, 13, 48]:
+          real_superclass[i]=18
+        elif ind in [81, 69, 41, 89, 85]:
+          real_superclass[i]=19
+    print(real_superclass)
 
     for i in range(128):
-        coarse[i].append(sum(outputs[i][72], outputs[i][4], outputs[i][95], outputs[i][30], outputs[i][55]))
+        coarse[i].append(sum([outputs[i][72], outputs[i][4], outputs[i][95], outputs[i][30], outputs[i][55]]))
         coarse[i].append(sum(outputs[i][73], outputs[i][32], outputs[i][67], outputs[i][91], outputs[i][1]))
         coarse[i].append(sum(outputs[i][92], outputs[i][70], outputs[i][82], outputs[i][54], outputs[i][62]))
         coarse[i].append(sum(outputs[i][16], outputs[i][61], outputs[i][9], outputs[i][10], outputs[i][28]))
