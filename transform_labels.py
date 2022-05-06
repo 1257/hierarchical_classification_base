@@ -1,7 +1,7 @@
 def my_entropy(outputs, labels):
     coarse = []
     real_superclass = [None]*128
-    print(real_superclass)
+    #print(real_superclass)
 
     for i in range(128):
         coarse.append([])
@@ -46,7 +46,7 @@ def my_entropy(outputs, labels):
           real_superclass[i]=18
         elif ind in [81, 69, 41, 89, 85]:
           real_superclass[i]=19
-    print(real_superclass)
+    #print(real_superclass)
 
     for i in range(128):
         coarse[i].append(sum([outputs[i][72], outputs[i][4], outputs[i][95], outputs[i][30], outputs[i][55]]))
@@ -70,7 +70,7 @@ def my_entropy(outputs, labels):
         coarse[i].append(sum([outputs[i][8], outputs[i][58], outputs[i][90], outputs[i][13], outputs[i][48]]))
         coarse[i].append(sum([outputs[i][81], outputs[i][69], outputs[i][41], outputs[i][89], outputs[i][85]]))
         
-    print('outputs: ', outputs[0])
-    print('outputs of superclasses', coarse[0])
-    print('real superclass:', real_superclass)
+    #print('outputs: ', outputs[0])
+    #print('outputs of superclasses', coarse[0])
+    #print('real superclass:', real_superclass)
     return coarse, real_superclass
