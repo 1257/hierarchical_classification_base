@@ -1,0 +1,29 @@
+def my_entropy(outputs, labels):
+    coarse = []
+    real_superclass = []
+
+    for i in range(128):
+        coarse.append([])
+        real_superclass = []
+
+    for i in range(128):
+        coarse[i].append(sum(outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1]))
+        coarse[i].append(sum(outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2]))
+        coarse[i].append(sum(outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1]))
+        coarse[i].append(sum(outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2]))
+        coarse[i].append(sum(outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1]))
+        coarse[i].append(sum(outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2]))
+        coarse[i].append(sum(outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1]))
+        coarse[i].append(sum(outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2]))
+        coarse[i].append(sum(outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1]))
+        coarse[i].append(sum(outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2]))
+        coarse[i].append(sum(outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1]))
+        coarse[i].append(sum(outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2]))
+        coarse[i].append(sum(outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1]))
+        coarse[i].append(sum(outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2]))
+        coarse[i].append(sum(outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1]))
+        coarse[i].append(sum(outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2]))
+        coarse[i].append(sum(outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1]))
+        coarse[i].append(sum(outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2]))
+        coarse[i].append(sum(outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1], outputs[i][1]))
+        coarse[i].append(sum(outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2], outputs[i][2]))
