@@ -71,3 +71,4 @@ def my_entropy(outputs, labels):
     print('outputs: ', outputs[0])
     print('outputs of superclasses', coarse[0])
     print('real superclass:', real_superclass)
+    return coarse, real_superclass
