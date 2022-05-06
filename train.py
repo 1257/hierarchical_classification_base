@@ -26,6 +26,8 @@ from conf import settings
 from utils import get_network, get_training_dataloader, get_test_dataloader, WarmUpLR, \
     most_recent_folder, most_recent_weights, last_epoch, best_acc_weights
 
+import transform_labels
+
 def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
 
     start = time.time()
@@ -43,7 +45,10 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
         print('outputs:', outputs)
         print('labels type:', type(labs))
         input()
+        out1, labs1 = transform_labels(outputs, labs)
         loss = loss_function(outputs, labels)
+        loss1=loss_function(out1, labs1)
+        print('loss1=', loss1)
         wandb.log({"loss": loss})
         loss.backward()
         optimizer.step()
