@@ -145,6 +145,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     net = get_network(args)
+    net.set_output_size(20)
 
     #data preprocessing:
     cifar100_training_loader1, cifar100_training_loader2 = get_training_dataloader(
@@ -245,4 +246,5 @@ if __name__ == '__main__':
             print('saving weights file to {}'.format(weights_path))
             torch.save(net.state_dict(), weights_path)
 
+    net.set_output_size(100)
     writer.close()
