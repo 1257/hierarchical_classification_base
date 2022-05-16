@@ -136,6 +136,8 @@ class ResNet(nn.Module):
     
     def set_output_size(self, size):
         self.fc = nn.Linear(512 * block.expansion, size)
+        print("self:", self)
+        print("self.fc:", self.fc)
 
 def resnet18():
     """ return a ResNet 18 object
