@@ -28,7 +28,7 @@ from utils import get_network, get_training_dataloader, get_test_dataloader, War
 
 from transform_labels import my_entropy
 
-def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
+def train(cifar100_training_loader, cifar100_test_loader, warmup_scheduler, epoch, single_label):
 
     start = time.time()
     net.train()
@@ -89,7 +89,7 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
     print('epoch {} training time consumed: {:.2f}s'.format(epoch, finish - start))
 
 @torch.no_grad()
-def eval_training(epoch=0, tb=True):
+def eval_training(epoch=0, tb=True, ):
 
     start = time.time()
     net.eval()
@@ -125,10 +125,10 @@ def eval_training(epoch=0, tb=True):
 
     #add informations to tensorboard
     if tb:
-        writer.add_scalar('Test/Average loss', test_loss / len(cifar100_test_loader.dataset), epoch)
-        writer.add_scalar('Test/Accuracy', correct.float() / len(cifar100_test_loader.dataset), epoch)
+        writer.add_scalar('Test/Average loss', test_loss / len(cifar100_test_loader1.dataset), epoch)
+        writer.add_scalar('Test/Accuracy', correct.float() / len(cifar100_test_loader1.dataset), epoch)
 
-    return correct.float() / len(cifar100_test_loader.dataset)
+    return correct.float() / len(cifar100_test_loader1.dataset)
 
 if __name__ == '__main__':
 
@@ -156,7 +156,7 @@ if __name__ == '__main__':
         shuffle=True
     )
 
-    cifar100_test_loader = get_test_dataloader(
+    cifar100_test_loader1, cifar100_test_loader2 = get_test_dataloader(
         settings.CIFAR100_TRAIN_MEAN,
         settings.CIFAR100_TRAIN_STD,
         num_workers=4,
@@ -229,7 +229,7 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler2, epoch, True)
+        train(cifar100_training_loader2, cifar100_test_loader2, warmup_scheduler2, epoch, True)
         acc = eval_training(epoch)
         wandb.log({"accuracy": acc})
 
