@@ -186,8 +186,11 @@ def get_network(args):
 def change_labels_to_coarse(dataset):
     for elem in dataset:
         print("elem before", elem)
-        elem[1]=superclass[elem[1]]
-        print("elem after", elem)
+        buf=list(elem)
+        buf[1]=superclass[buf[1]]
+        buf2=tuple(buf)
+        print("buf after", buf)
+        print(buf2)
         return dataset
 
 def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
