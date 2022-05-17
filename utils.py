@@ -185,13 +185,12 @@ def get_network(args):
 
 def change_labels_to_coarse(dataset):
     for elem in dataset:
-        print("elem before", elem)
+        print("elem class before", elem[1])
         buf=list(elem)
         buf[1]=superclass[buf[1]]
-        buf2=tuple(buf)
-        print("buf after", buf)
-        print(buf2)
-        return dataset
+        elem=tuple(buf)
+        print("elem class after", elem[1])
+    return dataset
 
 def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader
@@ -251,10 +250,13 @@ def get_test_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
     ])
     #cifar100_test = CIFAR100Test(path, transform=transform_test)
     cifar100_test = torchvision.datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_test)
-    cifar100_test_loader = DataLoader(
+    cifar100_test_super=change_labels_to_coarse(cifar100_test)
+    cifar100_test_loader1 = DataLoader(
         cifar100_test, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    cifar100_test_loader2 = DataLoader(
+        cifar100_test_super, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
-    return cifar100_test_loader
+    return cifar100_test_loader1, cifar100_test_loader2
 
 def compute_mean_std(cifar100_dataset):
     """compute the mean and std of cifar100 dataset
