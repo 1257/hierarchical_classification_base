@@ -15,7 +15,7 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
-superclass = ( 4,  1, 14,  8,  0,  #номер суперкласса соответствует номеру в иерархии на сайте (морские млекопитающие=0, рыбы=1 и т.д.)
+superclass = [ 4,  1, 14,  8,  0,  #номер суперкласса соответствует номеру в иерархии на сайте (морские млекопитающие=0, рыбы=1 и т.д.)
                6,  7,  7, 18,  3,  #номер класса соответствует лейблам в датасете
                3, 14,  9, 18,  7, 
               11,  3,  9,  7, 11,  
@@ -34,7 +34,7 @@ superclass = ( 4,  1, 14,  8,  0,  #номер суперкласса соотв
               16, 19,  2,  4,  6, 
               19,  5,  5,  8, 19,
               18,  1,  2, 15,  6,  
-               0, 17,  9, 14, 13)
+               0, 17,  9, 14, 13]
 
 
 def get_network(args):
@@ -185,7 +185,9 @@ def get_network(args):
 
 def change_labels_to_coarse(dataset):
     for elem in dataset:
-        print(elem)
+        print("elem before", elem)
+        elem[1]=superclass[elem[1]]
+        print("elem after", elem)
         return dataset
 
 def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
