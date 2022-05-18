@@ -184,16 +184,21 @@ def get_network(args):
     return net
 
 def change_labels_to_coarse(dataset):
-    i=0
-    for elem in dataset:
-        buf=list(elem)
-        if i<20:
-          print(buf[1], end=' ')
+#    i=0
+#    for elem in dataset:
+#        buf=list(elem)
+#        if i<20:
+#          print(buf[1], end=' ')
+#        buf[1]=superclass[buf[1]]
+#        elem=tuple(buf)
+#        if i<20:
+#          print("changed to", elem[1])
+#        i+=1
+
+    for i in range(len(dataset)):
+        buf=list(dataset[i])
         buf[1]=superclass[buf[1]]
-        elem=tuple(buf)
-        if i<20:
-          print("changed to", elem[1])
-        i+=1
+        dataset[i]=tuple(buf)
         
     print("first 20 labels:")
     for i in range(20):
