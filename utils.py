@@ -196,6 +196,7 @@ def change_labels_to_coarse(dataset):
 #        i+=1
 
     for i in range(len(dataset)):
+        print(dataset[i])
         buf=list(dataset[i])
         buf[1]=superclass[buf[1]]
         dataset[i]=tuple(buf)
