@@ -28,7 +28,7 @@ from utils import get_network, get_training_dataloader, get_test_dataloader, War
 
 from transform_labels import my_entropy
 
-def train(cifar100_training_loader, cifar100_test_loader, warmup_scheduler, epoch, single_label):
+def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
 
     start = time.time()
     net.train()
@@ -89,7 +89,7 @@ def train(cifar100_training_loader, cifar100_test_loader, warmup_scheduler, epoc
     print('epoch {} training time consumed: {:.2f}s'.format(epoch, finish - start))
 
 @torch.no_grad()
-def eval_training(epoch=0, tb=True, ):
+def eval_training(epoch=0, cifar100_test_loader, tb=True, ):
 
     start = time.time()
     net.eval()
@@ -229,8 +229,8 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, cifar100_test_loader2, warmup_scheduler2, epoch, True)
-        acc = eval_training(epoch)
+        train(cifar100_training_loader2, warmup_scheduler2, epoch, True)
+        acc = eval_training(epoch, cifar100_test_loader2)
         wandb.log({"accuracy": acc})
 
         #start to save best performance model after learning rate decay to 0.01
