@@ -196,10 +196,13 @@ def change_labels_to_coarse(dataset):
 #        i+=1
 
     for i in range(len(dataset)):
-        print(dataset[i])
+        if i<20:
+          print(dataset[i][1], end=" ")
         buf=list(dataset[i])
         buf[1]=superclass[buf[1]]
         dataset[i]=tuple(buf)
+        if i<20:
+          print("changed to", dataset[i][1])
         
     print("first 20 labels:")
     for i in range(20):
