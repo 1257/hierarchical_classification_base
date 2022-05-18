@@ -4,10 +4,10 @@ import torch
 def entropy2lvl(outputs, labels):
     loss = nn.CrossEntropyLoss()
     coarse = []
-    real_superclass = [None]*128
+    real_superclass = [None]*len(outputs)
     #print(real_superclass)
 
-    for i in range(128):
+    for i in range(len(outputs)):
         coarse.append([])
         ind=labels[i]
         if (ind in [72, 4, 95, 30, 55]):
@@ -52,7 +52,7 @@ def entropy2lvl(outputs, labels):
           real_superclass[i]=19
     #print(real_superclass)
 
-    for i in range(128):
+    for i in range(len(outputs)):
         coarse[i].append(sum([outputs[i][72], outputs[i][4], outputs[i][95], outputs[i][30], outputs[i][55]]))
         coarse[i].append(sum([outputs[i][73], outputs[i][32], outputs[i][67], outputs[i][91], outputs[i][1]]))
         coarse[i].append(sum([outputs[i][92], outputs[i][70], outputs[i][82], outputs[i][54], outputs[i][62]]))
