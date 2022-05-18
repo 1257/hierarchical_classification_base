@@ -195,19 +195,20 @@ def change_labels_to_coarse(dataset):
 #          print("changed to", elem[1])
 #        i+=1
 
-    for i in range(len(dataset)):
+    newset=list(dataset)
+    for i in range(len(newset)):
         if i<20:
-          print(dataset[i][1], end=" ")
-        buf=list(dataset[i])
+          print(newset[i][1], end=" ")
+        buf=list(newset[i])
         buf[1]=superclass[buf[1]]
-        dataset[i]=tuple(buf)
+        newset[i]=tuple(buf)
         if i<20:
-          print("changed to", dataset[i][1])
+          print("changed to", newset[i][1])
         
     print("first 20 labels:")
     for i in range(20):
-      print(dataset[i][1])
-    return dataset
+      print(newset[i][1])
+    return newset
 
 def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader
