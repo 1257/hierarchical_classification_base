@@ -233,6 +233,7 @@ def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=Tru
     cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [10000, 40000], generator=torch.Generator().manual_seed(0))
     print('First dataset size:', len(cifar100_trainset1))
     print('Second dataset size:', len(cifar100_trainset2))
+    cifar100_trainset2=list(cifar100_trainset2)
     cifar100_trainset2=change_labels_to_coarse(cifar100_trainset2)
     
     cifar100_training_loader1 = DataLoader(
