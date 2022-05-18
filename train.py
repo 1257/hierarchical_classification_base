@@ -147,7 +147,7 @@ if __name__ == '__main__':
 
     net = get_network(args)
     if torch.cuda.is_available():
-        net=ResNet().cuda()
+        net=ResNet(BasicBlock, [2, 2, 2, 2]).cuda()
     net.set_output_size(20)
     
 
