@@ -45,11 +45,11 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
         #print('outputs:', outputs)
         #print('labels type:', type(labs))
         loss = loss_function(outputs, labels)
-        out1, labs1 = my_entropy(outputs, labs)
-        out1=torch.tensor(out1)
-        labs1=torch.tensor(labs1)
-        loss1=loss_function(out1, labs1)
-        loss+=loss1
+        #out1, labs1 = my_entropy(outputs, labs)
+        #out1=torch.tensor(out1)
+        #labs1=torch.tensor(labs1)
+        #loss1=loss_function(out1, labs1)
+        #loss+=loss1
         #print('loss1=', loss1)
         #input()
         wandb.log({"loss": loss})
