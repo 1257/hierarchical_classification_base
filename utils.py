@@ -237,12 +237,12 @@ def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=Tru
     print('First dataset size:', len(cifar100_trainset1))
     print('Second dataset size:', len(cifar100_trainset2))
     cifar100_trainset2=list(cifar100_trainset2)
-    cifar100_trainset2=change_labels_to_coarse(cifar100_trainset2)
+    cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2)
     
     cifar100_training_loader1 = DataLoader(
         cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     cifar100_training_loader2 = DataLoader(
-        cifar100_trainset2, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+        cifar100_trainset2_1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     
     cifar100_training_loader = DataLoader(
         cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
