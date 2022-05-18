@@ -145,7 +145,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     net = get_network(args)
+    if torch.cuda.is_available():
+        net=ResNet().cuda()
     net.set_output_size(20)
+    
 
     #data preprocessing:
     cifar100_training_loader1, cifar100_training_loader2 = get_training_dataloader(
