@@ -26,11 +26,10 @@ from conf import settings
 from utils import get_network, get_training_dataloader, get_test_dataloader, WarmUpLR, \
     most_recent_folder, most_recent_weights, last_epoch, best_acc_weights
 
-from transform_labels import my_entropy
+from entropy_2_levels import entropy2lvl
 from models.resnet import ResNet, BasicBlock
 
 def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
-
     start = time.time()
     net.train()
     for batch_index, (images, labels) in enumerate(cifar100_training_loader):
@@ -45,14 +44,10 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
         #print('labels:', labs)
         #print('outputs:', outputs)
         #print('labels type:', type(labs))
-        loss = loss_function(outputs, labels)
-        #out1, labs1 = my_entropy(outputs, labs)
-        #out1=torch.tensor(out1)
-        #labs1=torch.tensor(labs1)
-        #loss1=loss_function(out1, labs1)
-        #loss+=loss1
-        #print('loss1=', loss1)
-        #input()
+        
+        #loss = loss_function(outputs, labels)
+        loss = entropy2lvl(outputs, labels)
+        
         wandb.log({"loss": loss})
         loss.backward()
         optimizer.step()
@@ -147,7 +142,7 @@ if __name__ == '__main__':
 
     net = get_network(args)
     if torch.cuda.is_available():
-        net=ResNet(BasicBlock, [2, 2, 2, 2], num_classes=20).cuda()
+        net=ResNet(BasicBlock, [2, 2, 2, 2], num_classes=100).cuda()
     #net.set_output_size(20)
     
 
@@ -233,8 +228,8 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler2, epoch, True)
-        acc = eval_training(cifar100_test_loader2, epoch)
+        train(cifar100_training_loader1, warmup_scheduler1, epoch, True)
+        acc = eval_training(cifar100_test_loader1, epoch)
         wandb.log({"accuracy": acc})
 
         #start to save best performance model after learning rate decay to 0.01
