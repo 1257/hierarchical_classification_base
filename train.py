@@ -27,6 +27,7 @@ from utils import get_network, get_training_dataloader, get_test_dataloader, War
     most_recent_folder, most_recent_weights, last_epoch, best_acc_weights
 
 from transform_labels import my_entropy
+from resnet import ResNet
 
 def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
 
