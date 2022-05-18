@@ -89,7 +89,7 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
     print('epoch {} training time consumed: {:.2f}s'.format(epoch, finish - start))
 
 @torch.no_grad()
-def eval_training(epoch=0, cifar100_test_loader, tb=True, ):
+def eval_training(cifar100_test_loader, epoch=0, tb=True, ):
 
     start = time.time()
     net.eval()
@@ -230,7 +230,7 @@ if __name__ == '__main__':
                 continue
 
         train(cifar100_training_loader2, warmup_scheduler2, epoch, True)
-        acc = eval_training(epoch, cifar100_test_loader2)
+        acc = eval_training(cifar100_test_loader2, epoch)
         wandb.log({"accuracy": acc})
 
         #start to save best performance model after learning rate decay to 0.01
