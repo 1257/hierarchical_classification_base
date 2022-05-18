@@ -79,4 +79,4 @@ def entropy2lvl(outputs, labels):
     l1=loss(outputs, labels)
     l2=loss(coarse, real_superclass)
     print("class loss =", l1, "; superclass loss =", l2)
-    #return coarse, real_superclass
+    return l1+l2
