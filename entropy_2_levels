@@ -1,4 +1,7 @@
+import torch.nn as nn
+
 def entropy2lvl(outputs, labels):
+    loss = nn.CrossEntropyLoss()
     coarse = []
     real_superclass = [None]*128
     #print(real_superclass)
@@ -73,4 +76,7 @@ def entropy2lvl(outputs, labels):
     #print('outputs: ', outputs[0])
     #print('outputs of superclasses', coarse[0])
     #print('real superclass:', real_superclass)
-    return coarse, real_superclass
+    l1=loss(outputs, labels)
+    l2=loss(coarse, real_superclass)
+    print("class loss =", l1, "; superclass loss =", l2)
+    #return coarse, real_superclass
