@@ -29,7 +29,7 @@ from utils import get_network, get_training_dataloader, get_test_dataloader, War
 from entropy_2_levels import entropy2lvl
 from models.resnet import ResNet, BasicBlock
 
-def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
+def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, optimizer):
     start = time.time()
     net.train()
     for batch_index, (images, labels) in enumerate(cifar100_training_loader):
@@ -45,8 +45,8 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
         #print('outputs:', outputs)
         #print('labels type:', type(labs))
         
-        #loss = loss_function(outputs, labels)
-        loss = entropy2lvl(outputs, labels)
+        loss = loss_function(outputs, labels)
+        #loss = entropy2lvl(outputs, labels)
         
         wandb.log({"loss": loss})
         loss.backward()
@@ -85,7 +85,7 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, single_label):
     print('epoch {} training time consumed: {:.2f}s'.format(epoch, finish - start))
 
 @torch.no_grad()
-def eval_training(cifar100_test_loader, epoch=0, tb=True, ):
+def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
 
     start = time.time()
     net.eval()
@@ -163,8 +163,9 @@ if __name__ == '__main__':
         shuffle=True
     )
 
-    loss_function = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
+    loss_function1 = nn.CrossEntropyLoss()
+    loss_function2 = entropy2lvl()
+    optimizer1 = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
     iter_per_epoch1 = len(cifar100_training_loader1)
     iter_per_epoch2 = len(cifar100_training_loader2)
@@ -230,8 +231,8 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader1, warmup_scheduler1, epoch, True)
-        acc = eval_training(cifar100_test_loader1, epoch)
+        train(cifar100_training_loader1, warmup_scheduler1, epoch, loss_function1, optimizer1)
+        acc = eval_training(loss_function1, cifar100_test_loader1, epoch)
         wandb.log({"accuracy": acc})
 
         #start to save best performance model after learning rate decay to 0.01
@@ -250,7 +251,7 @@ if __name__ == '__main__':
     net.set_output_size(100)
     net.freeze()
     net=net.cuda()
-    optimizer1 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
+    optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler1 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
     warmup_scheduler3 = WarmUpLR(optimizer1, iter_per_epoch1 * args.warm)
     
@@ -265,8 +266,8 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler3, epoch, True)
-        acc = eval_training(cifar100_test_loader2, epoch)
+        train(cifar100_training_loader2, warmup_scheduler3, epoch, loss_function2, optimizer2)
+        acc = eval_training(loss_function2, cifar100_test_loader2, epoch)
         wandb.log({"accuracy": acc})
 
         #start to save best performance model after learning rate decay to 0.01
