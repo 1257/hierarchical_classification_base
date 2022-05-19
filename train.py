@@ -169,9 +169,7 @@ if __name__ == '__main__':
     optimizer1 = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
     iter_per_epoch1 = len(cifar100_training_loader1)
-    iter_per_epoch2 = len(cifar100_training_loader2)
     warmup_scheduler1 = WarmUpLR(optimizer1, iter_per_epoch1 * args.warm)
-    warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
 
     if args.resume:
         recent_folder = most_recent_folder(os.path.join(settings.CHECKPOINT_PATH, args.net), fmt=settings.DATE_FORMAT)
@@ -252,9 +250,10 @@ if __name__ == '__main__':
     net.set_output_size(100)
     net.freeze()
     net=net.cuda()
+    iter_per_epoch2 = len(cifar100_training_loader2)
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler1 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
-    warmup_scheduler3 = WarmUpLR(optimizer1, iter_per_epoch1 * args.warm)
+    warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
     
     
     # step 2 -learning new output
