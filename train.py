@@ -170,8 +170,8 @@ if __name__ == '__main__':
     train_scheduler = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
     iter_per_epoch1 = len(cifar100_training_loader1)
     iter_per_epoch2 = len(cifar100_training_loader2)
-    warmup_scheduler1 = WarmUpLR(optimizer, iter_per_epoch1 * args.warm)
-    warmup_scheduler2 = WarmUpLR(optimizer, iter_per_epoch2 * args.warm)
+    warmup_scheduler1 = WarmUpLR(optimizer1, iter_per_epoch1 * args.warm)
+    warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
 
     if args.resume:
         recent_folder = most_recent_folder(os.path.join(settings.CHECKPOINT_PATH, args.net), fmt=settings.DATE_FORMAT)
