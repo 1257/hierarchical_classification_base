@@ -222,7 +222,7 @@ if __name__ == '__main__':
 
     # step 1 - pre-learning
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 11):
+    for epoch in range(1, 6):
         if epoch > args.warm:
             train_scheduler.step(epoch)
 
