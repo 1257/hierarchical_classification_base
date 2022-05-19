@@ -87,8 +87,8 @@ def modifiedEntropy2lvl(outputs, labels):
     loss = nn.CrossEntropyLoss()
     coarse = []
     real_superclass = [None]*len(outputs)
-    
-    outputs=nn.Softmax(outputs)
+    softmax=nn.Softmax(dim = 1)
+    outputs=softmax(outputs)
 
     for i in range(len(outputs)):
         coarse.append([])
