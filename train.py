@@ -220,13 +220,10 @@ if __name__ == '__main__':
         net.load_state_dict(torch.load(weights_path))
 
         resume_epoch = last_epoch(os.path.join(settings.CHECKPOINT_PATH, args.net, recent_folder))
-    
-    print(net)
-    print("features 0:", net.features[0])
 
     # step 1 - pre-learning
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 6):
+    for epoch in range(1, 31):
         if epoch > args.warm:
             train_scheduler.step(epoch)
 
@@ -262,7 +259,7 @@ if __name__ == '__main__':
     
     # step 2 -learning new output
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 6):
+    for epoch in range(1, 16):
         if epoch > args.warm:
             train_scheduler2.step(epoch)
 
