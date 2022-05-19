@@ -136,8 +136,7 @@ class ResNet(nn.Module):
     
     def set_output_size(self, size):
         self.fc = nn.Linear(512 * BasicBlock.expansion, size)
-        for param in self.fc.parameters():
-            param.requires_grad = False
+        self.fc.requires_grad_(True)
         #print("self:", self)
         print("self.fc:", self.fc)
         
