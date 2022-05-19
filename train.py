@@ -254,15 +254,15 @@ if __name__ == '__main__':
     net=net.cuda()
     iter_per_epoch2 = len(cifar100_training_loader2)
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
-    train_scheduler1 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
+    train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
     print(filter(lambda x: x.requires_grad, net.parameters()))
     
     # step 2 -learning new output
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 21):
+    for epoch in range(1, 6):
         if epoch > args.warm:
-            train_scheduler1.step(epoch)
+            train_scheduler2.step(epoch)
 
         if args.resume:
             if epoch <= resume_epoch:
@@ -286,4 +286,38 @@ if __name__ == '__main__':
             torch.save(net.state_dict(), weights_path)
             
         #net.print_conv5_x()
+    
+    net.conv5_x.requires_grad_(True)
+    optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
+    train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
+    warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
+    print(filter(lambda x: x.requires_grad, net.parameters()))
+    
+    # step 3 -learning new output and last block
+    #for epoch in range(1, settings.EPOCH + 1):
+    for epoch in range(1, 21):
+        if epoch > args.warm:
+            train_scheduler2.step(epoch)
+
+        if args.resume:
+            if epoch <= resume_epoch:
+                continue
+
+        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2)
+        acc = eval_training(loss_function2, cifar100_test_loader2, epoch)
+        wandb.log({"accuracy": acc})
+
+        #start to save best performance model after learning rate decay to 0.01
+        if epoch > settings.MILESTONES[1] and best_acc < acc:
+            weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
+            print('saving weights file to {}'.format(weights_path))
+            torch.save(net.state_dict(), weights_path)
+            best_acc = acc
+            continue
+
+        if not epoch % settings.SAVE_EPOCH:
+            weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='regular')
+            print('saving weights file to {}'.format(weights_path))
+            torch.save(net.state_dict(), weights_path)
+    
     writer.close()
