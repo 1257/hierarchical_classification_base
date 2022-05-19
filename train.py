@@ -26,7 +26,8 @@ from conf import settings
 from utils import get_network, get_training_dataloader, get_test_dataloader, WarmUpLR, \
     most_recent_folder, most_recent_weights, last_epoch, best_acc_weights
 
-from entropy_2_levels import entropy2lvl
+#from entropy_2_levels import entropy2lvl
+import entropy_2_levels as myEntropy
 from models.resnet import ResNet, BasicBlock
 
 def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, optimizer):
@@ -164,7 +165,7 @@ if __name__ == '__main__':
     )
 
     loss_function1 = nn.CrossEntropyLoss()
-    loss_function2 = entropy_2_levels.entropy2lvl()
+    loss_function2 = myEntropy.entropy2lvl()
     optimizer1 = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
     iter_per_epoch1 = len(cifar100_training_loader1)
