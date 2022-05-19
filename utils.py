@@ -249,7 +249,7 @@ def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=Tru
         cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
     #return cifar100_training_loader
-    return cifar100_training_loader1, cifar100_training_loader2
+    return cifar100_training_loader2, cifar100_training_loader1
 
 def get_test_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader
@@ -275,7 +275,7 @@ def get_test_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
     cifar100_test_loader2 = DataLoader(
         cifar100_test_super, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
-    return cifar100_test_loader1, cifar100_test_loader2
+    return cifar100_test_loader2, cifar100_test_loader1
 
 def compute_mean_std(cifar100_dataset):
     """compute the mean and std of cifar100 dataset
