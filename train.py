@@ -254,7 +254,7 @@ if __name__ == '__main__':
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler1 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
-    
+    print(filter(lambda x: x.requires_grad, net.parameters()))
     
     # step 2 -learning new output
     #for epoch in range(1, settings.EPOCH + 1):
