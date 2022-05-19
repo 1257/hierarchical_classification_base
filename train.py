@@ -222,7 +222,7 @@ if __name__ == '__main__':
         resume_epoch = last_epoch(os.path.join(settings.CHECKPOINT_PATH, args.net, recent_folder))
     
     print(net)
-    #net.features[4].requires_grad_(True)
+    print("features 0:", net.features[0])
 
     # step 1 - pre-learning
     #for epoch in range(1, settings.EPOCH + 1):
