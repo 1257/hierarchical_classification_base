@@ -283,5 +283,5 @@ if __name__ == '__main__':
             print('saving weights file to {}'.format(weights_path))
             torch.save(net.state_dict(), weights_path)
             
-        net.print_conv5_x()
+        #net.print_conv5_x()
     writer.close()
