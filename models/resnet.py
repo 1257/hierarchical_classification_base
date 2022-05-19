@@ -141,6 +141,20 @@ class ResNet(nn.Module):
         
     def print_output_layer(self):
         print("self.fc:", self.fc)
+        
+    def freeze(self):
+        for param in self.conv1.parameters():
+            param.requires_grad = False
+        for param in self.conv2_x.parameters():
+            param.requires_grad = False
+        for param in self.conv3_x.parameters():
+            param.requires_grad = False
+        for param in self.conv4_x.parameters():
+            param.requires_grad = False
+        for param in self.conv5_x.parameters():
+            param.requires_grad = False
+        print("model frozen")
+        print("conv5_x:", self.conv5_x)
 
 def resnet18():
     """ return a ResNet 18 object
