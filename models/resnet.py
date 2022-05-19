@@ -155,6 +155,9 @@ class ResNet(nn.Module):
             param.requires_grad = False
         print("model frozen")
         print("conv5_x:", self.conv5_x)
+        
+    def print_conv5_x(self):
+        print("conv5_x:", self.conv5_x)
 
 def resnet18():
     """ return a ResNet 18 object
