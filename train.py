@@ -220,7 +220,9 @@ if __name__ == '__main__':
         resume_epoch = last_epoch(os.path.join(settings.CHECKPOINT_PATH, args.net, recent_folder))
 
 
-    for epoch in range(1, settings.EPOCH + 1):
+    # step 1 - pre-learning
+    #for epoch in range(1, settings.EPOCH + 1):
+    for epoch in range(1, 21):
         if epoch > args.warm:
             train_scheduler.step(epoch)
 
@@ -246,4 +248,33 @@ if __name__ == '__main__':
             torch.save(net.state_dict(), weights_path)
 
     net.set_output_size(100)
+    net.freeze()
+    
+    
+    # step 2 -learning new output
+    #for epoch in range(1, settings.EPOCH + 1):
+    for epoch in range(1, 21):
+        if epoch > args.warm:
+            train_scheduler.step(epoch)
+
+        if args.resume:
+            if epoch <= resume_epoch:
+                continue
+
+        train(cifar100_training_loader1, warmup_scheduler1, epoch, True)
+        acc = eval_training(cifar100_test_loader1, epoch)
+        wandb.log({"accuracy": acc})
+
+        #start to save best performance model after learning rate decay to 0.01
+        if epoch > settings.MILESTONES[1] and best_acc < acc:
+            weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
+            print('saving weights file to {}'.format(weights_path))
+            torch.save(net.state_dict(), weights_path)
+            best_acc = acc
+            continue
+
+        if not epoch % settings.SAVE_EPOCH:
+            weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='regular')
+            print('saving weights file to {}'.format(weights_path))
+            torch.save(net.state_dict(), weights_path)
     writer.close()
