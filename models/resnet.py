@@ -136,6 +136,8 @@ class ResNet(nn.Module):
     
     def set_output_size(self, size):
         self.fc = nn.Linear(512 * BasicBlock.expansion, size)
+        for param in self.fc.parameters():
+            param.requires_grad = False
         #print("self:", self)
         print("self.fc:", self.fc)
         
@@ -143,18 +145,26 @@ class ResNet(nn.Module):
         print("self.fc:", self.fc)
         
     def freeze(self):
-        for param in self.conv1.parameters():
-            param.requires_grad = False
-        for param in self.conv2_x.parameters():
-            param.requires_grad = False
-        for param in self.conv3_x.parameters():
-            param.requires_grad = False
-        for param in self.conv4_x.parameters():
-            param.requires_grad = False
-        for param in self.conv5_x.parameters():
-            param.requires_grad = False
+#        for param in self.conv1.parameters():
+#            param.requires_grad = False
+#        for param in self.conv2_x.parameters():
+#            param.requires_grad = False
+#        for param in self.conv3_x.parameters():
+#            param.requires_grad = False
+#        for param in self.conv4_x.parameters():
+#            param.requires_grad = False
+#        for param in self.conv5_x.parameters():
+#            param.requires_grad = False
+#        print("model frozen")
+#        print("conv5_x:", self.conv5_x)
+
+        self.conv1.requires_grad_(False)
+        self.conv2_x.requires_grad_(False)
+        self.conv3_x.requires_grad_(False)
+        self.conv4_x.requires_grad_(False)
+        self.conv5_x.requires_grad_(False)
         print("model frozen")
-        print("conv5_x:", self.conv5_x)
+        #print("conv5_x:", self.conv5_x)
         
     def print_conv5_x(self):
         print("conv5_x:", self.conv5_x)
