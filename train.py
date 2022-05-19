@@ -167,7 +167,7 @@ if __name__ == '__main__':
     loss_function1 = nn.CrossEntropyLoss()
     loss_function2 = myEntropy.entropy2lvl
     optimizer1 = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
-    train_scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
+    train_scheduler = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
     iter_per_epoch1 = len(cifar100_training_loader1)
     iter_per_epoch2 = len(cifar100_training_loader2)
     warmup_scheduler1 = WarmUpLR(optimizer, iter_per_epoch1 * args.warm)
