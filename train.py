@@ -222,7 +222,7 @@ if __name__ == '__main__':
 
     # step 1 - pre-learning
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 21):
+    for epoch in range(1, 11):
         if epoch > args.warm:
             train_scheduler.step(epoch)
 
@@ -249,6 +249,7 @@ if __name__ == '__main__':
 
     net.set_output_size(100)
     net.freeze()
+    net=net.cuda()
     optimizer1 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler1 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
     warmup_scheduler3 = WarmUpLR(optimizer1, iter_per_epoch1 * args.warm)
