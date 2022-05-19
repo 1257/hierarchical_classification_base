@@ -249,20 +249,23 @@ if __name__ == '__main__':
 
     net.set_output_size(100)
     net.freeze()
+    optimizer1 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
+    train_scheduler1 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
+    warmup_scheduler3 = WarmUpLR(optimizer1, iter_per_epoch1 * args.warm)
     
     
     # step 2 -learning new output
     #for epoch in range(1, settings.EPOCH + 1):
     for epoch in range(1, 21):
         if epoch > args.warm:
-            train_scheduler.step(epoch)
+            train_scheduler1.step(epoch)
 
         if args.resume:
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader1, warmup_scheduler1, epoch, True)
-        acc = eval_training(cifar100_test_loader1, epoch)
+        train(cifar100_training_loader2, warmup_scheduler3, epoch, True)
+        acc = eval_training(cifar100_test_loader2, epoch)
         wandb.log({"accuracy": acc})
 
         #start to save best performance model after learning rate decay to 0.01
@@ -277,4 +280,6 @@ if __name__ == '__main__':
             weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='regular')
             print('saving weights file to {}'.format(weights_path))
             torch.save(net.state_dict(), weights_path)
+            
+        net.print_conv5_x()
     writer.close()
