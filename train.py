@@ -223,7 +223,7 @@ if __name__ == '__main__':
 
     # step 1 - pre-learning
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 101):
+    for epoch in range(1, 81):
         if epoch > args.warm:
             train_scheduler.step(epoch)
 
@@ -253,13 +253,13 @@ if __name__ == '__main__':
     net=net.cuda()
     iter_per_epoch2 = len(cifar100_training_loader2)
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
-    train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES1, gamma=0.2) #learning rate decay
+    train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer2, milestones=settings.MILESTONES1, gamma=0.2) #learning rate decay
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
     print(filter(lambda x: x.requires_grad, net.parameters()))
     
     # step 2 -learning new output
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 41):
+    for epoch in range(1, 51):
         if epoch > args.warm:
             train_scheduler2.step(epoch)
 
@@ -272,7 +272,7 @@ if __name__ == '__main__':
         wandb.log({"accuracy": acc})
 
         #start to save best performance model after learning rate decay to 0.01
-        if epoch > settings.MILESTONES[1] and best_acc < acc:
+        if epoch > settings.MILESTONES1[1] and best_acc < acc:
             weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
             print('saving weights file to {}'.format(weights_path))
             torch.save(net.state_dict(), weights_path)
@@ -308,7 +308,7 @@ if __name__ == '__main__':
         wandb.log({"accuracy": acc})
 
         #start to save best performance model after learning rate decay to 0.01
-        if epoch > settings.MILESTONES[1] and best_acc < acc:
+        if epoch > settings.MILESTONES2[1] and best_acc < acc:
             weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
             print('saving weights file to {}'.format(weights_path))
             torch.save(net.state_dict(), weights_path)
