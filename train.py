@@ -223,7 +223,7 @@ if __name__ == '__main__':
 
     # step 1 - pre-learning
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 31):
+    for epoch in range(1, 101):
         if epoch > args.warm:
             train_scheduler.step(epoch)
 
@@ -253,13 +253,13 @@ if __name__ == '__main__':
     net=net.cuda()
     iter_per_epoch2 = len(cifar100_training_loader2)
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
-    train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
+    train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES1, gamma=0.2) #learning rate decay
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
     print(filter(lambda x: x.requires_grad, net.parameters()))
     
     # step 2 -learning new output
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 16):
+    for epoch in range(1, 41):
         if epoch > args.warm:
             train_scheduler2.step(epoch)
 
@@ -288,13 +288,13 @@ if __name__ == '__main__':
     
     net.conv5_x.requires_grad_(True)
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
-    train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
+    train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES2, gamma=0.2) #learning rate decay
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
     print(filter(lambda x: x.requires_grad, net.parameters()))
     
     # step 3 -learning new output and last block
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 21):
+    for epoch in range(1, 80):
         if epoch > args.warm:
             train_scheduler2.step(epoch)
 
