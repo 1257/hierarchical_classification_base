@@ -221,6 +221,7 @@ if __name__ == '__main__':
 
         resume_epoch = last_epoch(os.path.join(settings.CHECKPOINT_PATH, args.net, recent_folder))
 
+    wandb.log({"stage": 1})
     # step 1 - pre-learning
     #for epoch in range(1, settings.EPOCH + 1):
     for epoch in range(1, 81):
@@ -257,6 +258,7 @@ if __name__ == '__main__':
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
     print(filter(lambda x: x.requires_grad, net.parameters()))
     
+    wandb.log({"stage": 2})
     # step 2 -learning new output
     #for epoch in range(1, settings.EPOCH + 1):
     for epoch in range(1, 51):
@@ -293,6 +295,7 @@ if __name__ == '__main__':
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
     print(filter(lambda x: x.requires_grad, net.parameters()))
     
+    wandb.log({"stage": 3})
     # step 3 -learning new output and last block
     #for epoch in range(1, settings.EPOCH + 1):
     for epoch in range(1, 101):
