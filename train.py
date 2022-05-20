@@ -295,7 +295,7 @@ if __name__ == '__main__':
     
     # step 3 -learning new output and last block
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 81):
+    for epoch in range(1, 101):
         if epoch > args.warm:
             train_scheduler2.step(epoch)
 
