@@ -287,6 +287,7 @@ if __name__ == '__main__':
         #net.print_conv5_x()
     
     net.conv5_x.requires_grad_(True)
+    net.conv4_x.requires_grad_(True)
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES2, gamma=0.2) #learning rate decay
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
