@@ -224,7 +224,7 @@ if __name__ == '__main__':
     wandb.log({"stage": 1})
     # step 1 - pre-learning
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 66):
+    for epoch in range(1, 51):
         if epoch > args.warm:
             train_scheduler.step(epoch)
 
@@ -262,7 +262,7 @@ if __name__ == '__main__':
     wandb.log({"stage": 2})
     # step 2 -learning new output
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 41):
+    for epoch in range(1, 21):
         if epoch > args.warm:
             train_scheduler2.step(epoch)
 
