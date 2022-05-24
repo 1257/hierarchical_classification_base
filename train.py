@@ -235,6 +235,7 @@ if __name__ == '__main__':
         train(cifar100_training_loader1, warmup_scheduler1, epoch, loss_function1, optimizer1)
         acc = eval_training(loss_function1, cifar100_test_loader1, epoch)
         wandb.log({"accuracy": acc})
+        wandb.log({"stage": 1})
 
         #start to save best performance model after learning rate decay to 0.01
         if epoch > settings.MILESTONES[1] and best_acc < acc:
@@ -261,7 +262,7 @@ if __name__ == '__main__':
     wandb.log({"stage": 2})
     # step 2 -learning new output
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 51):
+    for epoch in range(1, 41):
         if epoch > args.warm:
             train_scheduler2.step(epoch)
 
@@ -272,6 +273,7 @@ if __name__ == '__main__':
         train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2)
         acc = eval_training(loss_function2, cifar100_test_loader2, epoch)
         wandb.log({"accuracy": acc})
+        wandb.log({"stage": 2})
 
         #start to save best performance model after learning rate decay to 0.01
         if epoch > settings.MILESTONES1[1] and best_acc < acc:
@@ -312,6 +314,7 @@ if __name__ == '__main__':
         train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2)
         acc = eval_training(loss_function2, cifar100_test_loader2, epoch)
         wandb.log({"accuracy": acc})
+        wandb.log({"stage": 3})
 
         #start to save best performance model after learning rate decay to 0.01
         if epoch > settings.MILESTONES2[1] and best_acc < acc:
