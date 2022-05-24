@@ -24,7 +24,7 @@ EPOCH = 200
 
 MILESTONES = [30, 40, 45]
 MILESTONES1 = [5, 10, 15]
-MILESTONES2 = [20, 30, 50]
+MILESTONES2 = [20, 40, 60]
 
 
 #initial learning rate
