@@ -88,6 +88,7 @@ def modifiedEntropy2lvl(outputs, labels):
     
     coarse = []
     for i in range(len(labels)):
+        coarse.append([])
         for j in range(20):
             coarse[i].append(sum(outputs[i][j*5:(j+1)*5-1]))
     
