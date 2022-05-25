@@ -220,7 +220,7 @@ def change_labels_order(dataset):
     if i<20:
       print("class", newset[i][1], end=" ")
     buf=list(newset[i])
-    buf[1]=mm.index[buf[1]]
+    buf[1]=mm.index(buf[1])
     newset[i]=tuple(buf)
     if i<20:
       print("changed to class", newset[i][1])
@@ -239,6 +239,11 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
     Returns: train_data_loader:torch dataloader object
     """
 
+    if is_new_set:
+      print("using new set in trainloader")
+    else:
+      print("using old set in trainloader")
+    
     transform_train = transforms.Compose([
         #transforms.ToPILImage(),
         transforms.RandomCrop(32, padding=4),
@@ -293,6 +298,11 @@ def get_test_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2, shu
     Returns: cifar100_test_loader:torch dataloader object
     """
 
+    if is_new_set:
+      print("using new set in testloader")
+    else:
+      print("using old set in testloader")
+    
     transform_test = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
