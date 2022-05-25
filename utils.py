@@ -188,10 +188,12 @@ def change_labels_to_coarse(dataset, is_new_labels): #для старого на
         if i<20:
           print("class", newset[i][1], end=" ")
         buf=list(newset[i])
+        
         if(is_new_labels):
-          buf[1]=superclass[buf[1]]
-        else:
           buf[1]=buf[1]//5
+        else:
+          buf[1]=superclass[buf[1]]
+          
         newset[i]=tuple(buf)
         if i<20:
           print("changed to superclass", newset[i][1])
@@ -225,7 +227,7 @@ def change_labels_order(dataset):
     
   return newset
   
-def get_training_dataloader(is_old_set, mean, std, batch_size=16, num_workers=2, shuffle=True):
+def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2, shuffle=True): #True в первом параметре, если порядок классов изменен
     """ return training dataloader
     Args:
         mean: mean of cifar100 training dataset
@@ -260,7 +262,7 @@ def get_training_dataloader(is_old_set, mean, std, batch_size=16, num_workers=2,
     
     trainset2_super_new=change_labels_to_coarse(trainset2_new, True)
     
-    if is_old_set:
+    if is_new_set == False:
       cifar100_training_loader1 = DataLoader(
           cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
       cifar100_training_loader2 = DataLoader(
@@ -279,7 +281,7 @@ def get_training_dataloader(is_old_set, mean, std, batch_size=16, num_workers=2,
 
     return cifar100_training_loader2, cifar100_training_loader1
 
-def get_test_dataloader(is_old_set, mean, std, batch_size=16, num_workers=2, shuffle=True):
+def get_test_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader
     Args:
         mean: mean of cifar100 test dataset
@@ -313,7 +315,7 @@ def get_test_dataloader(is_old_set, mean, std, batch_size=16, num_workers=2, shu
     cifar100_test_loader2_new = DataLoader(
         cifar100_test_super_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     
-    if is_old_set:
+    if is_new_set==False:
       return cifar100_test_loader2, cifar100_test_loader1
     else:
       return cifar100_test_loader2_new, cifar100_test_loader1_new
