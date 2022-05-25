@@ -90,7 +90,7 @@ def modifiedEntropy2lvl(outputs, labels):
     for i in range(len(labels)):
         coarse.append([])
         for j in range(20):
-            coarse[i].append(sum(outputs[i][j*5:(j+1)*5-1]))
+            coarse[i].append(sum(outputs[i][j*5:(j+1)*5]))
     
     real_superclass = [labels[i]//5 for i in range(len(labels))]
     
