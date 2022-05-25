@@ -226,7 +226,7 @@ if __name__ == '__main__':
     wandb.log({"stage": 1})
     # step 1 - pre-learning
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 51):
+    for epoch in range(1, 11):  #51
         if epoch > args.warm:
             train_scheduler.step(epoch)
 
@@ -264,7 +264,7 @@ if __name__ == '__main__':
     wandb.log({"stage": 2})
     # step 2 -learning new output
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(1, 21):
+    for epoch in range(1, 11):  #21
         if epoch > args.warm:
             train_scheduler2.step(epoch)
 
@@ -272,8 +272,8 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2)
-        acc = eval_training(loss_function2, cifar100_test_loader2, epoch)
+        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function3, optimizer2)  #loss_function2
+        acc = eval_training(loss_function3, cifar100_test_loader2, epoch) #loss_function2
         wandb.log({"accuracy": acc})
         wandb.log({"stage": 2})
 
@@ -313,8 +313,8 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2)
-        acc = eval_training(loss_function2, cifar100_test_loader2, epoch)
+        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function3, optimizer2) #loss_function2
+        acc = eval_training(loss_function3, cifar100_test_loader2, epoch) #loss_function2
         wandb.log({"accuracy": acc})
         wandb.log({"stage": 3})
 
