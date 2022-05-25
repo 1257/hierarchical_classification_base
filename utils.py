@@ -183,6 +183,7 @@ def get_network(args):
     return net
 
 def change_labels_to_coarse(dataset, is_new_labels): #для старого набора классов, где порядок был по алфавиту, передать вторым параметром False, для нового - True
+    print("is_new_labels in change to coarse is", is_new_labels)
     newset=list(dataset)
     for i in range(len(newset)):
         if i<20:
@@ -201,6 +202,9 @@ def change_labels_to_coarse(dataset, is_new_labels): #для старого на
     print("superclasses of first 20 items:")
     for i in range(20):
       print(newset[i][1])
+    
+    print()
+    print()
     return newset
 
 def change_labels_order(dataset):
@@ -239,11 +243,6 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
     Returns: train_data_loader:torch dataloader object
     """
 
-    if is_new_set:
-      print("using new set in trainloader")
-    else:
-      print("using old set in trainloader")
-    
     transform_train = transforms.Compose([
         #transforms.ToPILImage(),
         transforms.RandomCrop(32, padding=4),
@@ -252,37 +251,52 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
     ])
-    #cifar100_training = CIFAR100Train(path, transform=transform_train)
+    
     cifar100_training = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform_train)
-    
-    
     cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [10000, 40000], generator=torch.Generator().manual_seed(0))
     print('First dataset size:', len(cifar100_trainset2))
     print('Second dataset size:', len(cifar100_trainset1))
-    cifar100_trainset2=list(cifar100_trainset2)
-    cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2, False)
     
-    trainset1_new = change_labels_order(cifar100_trainset1)
-    trainset2_new = change_labels_order(cifar100_trainset2)
     
-    trainset2_super_new=change_labels_to_coarse(trainset2_new, True)
+    if is_new_set:
+      print("using new set in trainloader")
+      cifar100_trainset1 = change_labels_order(cifar100_trainset1)
+      cifar100_trainset2 = change_labels_order(cifar100_trainset2)
+    else:
+      print("using old set in trainloader")
     
-    if is_new_set == False:
-      cifar100_training_loader1 = DataLoader(
+    cifar100_trainset2 = change_labels_to_coarse(cifar100_trainset2, is_new_set)
+    
+    cifar100_training_loader1 = DataLoader(
           cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-      cifar100_training_loader2 = DataLoader(
+    cifar100_training_loader2 = DataLoader(
           cifar100_trainset2_1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     
-      cifar100_training_loader = DataLoader(
-          cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-    else:
-        cifar100_training_loader1 = DataLoader(
-          trainset1_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-        cifar100_training_loader2 = DataLoader(
-          trainset2_super_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     
-        cifar100_training_loader = DataLoader(
-          cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    #cifar100_trainset2=list(cifar100_trainset2)
+    #cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2, False)
+    
+    #trainset1_new = change_labels_order(cifar100_trainset1)
+    #trainset2_new = change_labels_order(cifar100_trainset2)
+    
+    #trainset2_super_new=change_labels_to_coarse(trainset2_new, True)
+    
+    #if is_new_set == False:
+      #cifar100_training_loader1 = DataLoader(
+          #cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+      #cifar100_training_loader2 = DataLoader(
+          #cifar100_trainset2_1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    
+      #cifar100_training_loader = DataLoader(
+          #cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    #else:
+        #cifar100_training_loader1 = DataLoader(
+          #trainset1_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+        #cifar100_training_loader2 = DataLoader(
+          #trainset2_super_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    
+        #cifar100_training_loader = DataLoader(
+          #cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
     return cifar100_training_loader2, cifar100_training_loader1
 
@@ -297,38 +311,48 @@ def get_test_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2, shu
         shuffle: whether to shuffle
     Returns: cifar100_test_loader:torch dataloader object
     """
-
-    if is_new_set:
-      print("using new set in testloader")
-    else:
-      print("using old set in testloader")
-    
     transform_test = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
     ])
-    #cifar100_test = CIFAR100Test(path, transform=transform_test)
+
     cifar100_test = torchvision.datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_test)
-    cifar100_test_new=change_labels_order(cifar100_test)
-    cifar100_test_super=change_labels_to_coarse(cifar100_test, False)
-    cifar100_test_super_new=change_labels_to_coarse(cifar100_test_new, True)
     
-    #for old (alphabetal) set:
+    if is_new_set:
+      print("using new set in testloader")
+      cifar100_test=change_labels_order(cifar100_test)
+    else:
+      print("using old set in testloader")
+    
+    cifar100_test_coarse = change_labels_to_coarse(cifar100_test, is_new_set)
+    
     cifar100_test_loader1 = DataLoader(
         cifar100_test, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     cifar100_test_loader2 = DataLoader(
-        cifar100_test_super, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+        cifar100_test_coarse, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    
+    return cifar100_test_loader2, cifar100_test_loader1
+    
+    #cifar100_test_new=change_labels_order(cifar100_test)
+    #cifar100_test_super=change_labels_to_coarse(cifar100_test, False)
+    #cifar100_test_super_new=change_labels_to_coarse(cifar100_test_new, True)
+    
+    #for old (alphabetal) set:
+    #cifar100_test_loader1 = DataLoader(
+        #cifar100_test, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    #cifar100_test_loader2 = DataLoader(
+        #cifar100_test_super, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     
     #for new (grouped) set:
-    cifar100_test_loader1_new = DataLoader(
-        cifar100_test_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-    cifar100_test_loader2_new = DataLoader(
-        cifar100_test_super_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    #cifar100_test_loader1_new = DataLoader(
+        #cifar100_test_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    #cifar100_test_loader2_new = DataLoader(
+        #cifar100_test_super_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     
-    if is_new_set==False:
-      return cifar100_test_loader2, cifar100_test_loader1
-    else:
-      return cifar100_test_loader2_new, cifar100_test_loader1_new
+    #if is_new_set==False:
+      #return cifar100_test_loader2, cifar100_test_loader1
+    #else:
+      #return cifar100_test_loader2_new, cifar100_test_loader1_new
 
 def compute_mean_std(cifar100_dataset):
     """compute the mean and std of cifar100 dataset
