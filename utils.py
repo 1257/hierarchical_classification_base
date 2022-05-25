@@ -270,7 +270,7 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
     
       cifar100_training_loader = DataLoader(
           cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-      else:
+    else:
         cifar100_training_loader1 = DataLoader(
           trainset1_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
       cifar100_training_loader2 = DataLoader(
