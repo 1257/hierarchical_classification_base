@@ -110,7 +110,7 @@ def modifiedEntropy2lvl(outputs, labels):
     l2=loss(coarse, real_superclass)
     #print("class loss =", l1, "; superclass loss =", l2)
     
-    c=input()
+    #c=input()
     
     return 0.3*l1+0.7*l2
 
