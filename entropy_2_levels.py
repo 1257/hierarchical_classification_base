@@ -106,8 +106,8 @@ def modifiedEntropy2lvl(outputs, labels):
     c=input()
     
     l1=loss(outputs, labels)
-    #l2=loss(torch.tensor(coarse), torch.tensor(real_superclass))
-    l2=loss(coarse, torch.tensor(real_superclass))
+    l2=loss(torch.tensor(coarse), torch.tensor(real_superclass))
+    #l2=loss(coarse, torch.tensor(real_superclass))
     #print("class loss =", l1, "; superclass loss =", l2)
     return l1+l2
 
