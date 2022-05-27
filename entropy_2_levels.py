@@ -95,7 +95,7 @@ def modifiedEntropy2lvl(outputs, labels):
         coarse[i]=torch.tensor(coarse[i]).softmax(dim=0)
         
     
-    real_superclass = [labels[i]//5 for i in range(len(labels))]
+    real_superclass = torch.tensor([labels[i]//5 for i in range(len(labels))])
     
     for i in range(10):
         print(i, ":")
@@ -103,11 +103,12 @@ def modifiedEntropy2lvl(outputs, labels):
         print("outputs:", outputs[i], "; coarse:", coarse[i])
         print()
     
-    c=input()
-    
     l1=loss(outputs, labels)
-    l2=loss(torch.tensor(coarse), torch.tensor(real_superclass))
+    l2=loss(torch.tensor(coarse), real_superclass)
     #l2=loss(coarse, torch.tensor(real_superclass))
     #print("class loss =", l1, "; superclass loss =", l2)
+    
+    c=input()
+    
     return l1+l2
 
