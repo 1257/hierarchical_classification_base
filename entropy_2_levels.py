@@ -94,7 +94,7 @@ def modifiedEntropy2lvl(outputs, labels):
             coarse[i].append(sum(outputs[i][j*5:(j+1)*5]))
         #coarse[i]=torch.tensor(coarse[i]).softmax(dim=0)
     coarse=torch.tensor(coarse).softmax(dim=1)
-    print("coarse with softmax:", coarse)
+    #print("coarse with softmax:", coarse)
         
     
     real_superclass = torch.tensor([labels[i]//5 for i in range(len(labels))])
