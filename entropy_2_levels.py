@@ -87,12 +87,13 @@ def modifiedEntropy2lvl(outputs, labels):
     loss = nn.CrossEntropyLoss()
     
     coarse = []
+    outputs=outputs.softmax(dim=1)
     for i in range(len(labels)):
         coarse.append([])
-        outputs[i]=outputs[i].softmax(dim=0)
         for j in range(20):
             coarse[i].append(sum(outputs[i][j*5:(j+1)*5]))
-        coarse[i]=torch.tensor(coarse[i]).softmax(dim=0)
+        #coarse[i]=torch.tensor(coarse[i]).softmax(dim=0)
+    coarse=torch.tensor(coarse).softmax(dim=1)
     print("coarse with softmax:", coarse)
         
     
