@@ -112,5 +112,5 @@ def modifiedEntropy2lvl(outputs, labels):
     
     c=input()
     
-    return l1+l2
+    return 0.3*l1+0.7*l2
 
