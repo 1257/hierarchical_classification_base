@@ -6,7 +6,7 @@ def entropy2lvl(outputs, labels):
     coarse = []
     real_superclass = [None]*len(outputs)
     #print(real_superclass)
-    func=max()
+    func=max
 
     for i in range(len(outputs)):
         coarse.append([])
