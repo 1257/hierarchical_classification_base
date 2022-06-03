@@ -313,8 +313,8 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2) #loss_function2
-        acc = eval_training(loss_function2, cifar100_test_loader2, epoch) #loss_function2
+        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function1, optimizer2) #loss_function2
+        acc = eval_training(loss_function1, cifar100_test_loader2, epoch) #loss_function2
         wandb.log({"accuracy": acc})
         wandb.log({"stage": 3})
 
