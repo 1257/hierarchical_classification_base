@@ -2,7 +2,7 @@ def my_entropy(outputs, labels):
     coarse = []
     real_superclass = [None]*128
     #print(real_superclass)
-    func=max()
+    func=max
 
     for i in range(128):
         coarse.append([])
