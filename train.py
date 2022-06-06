@@ -234,7 +234,7 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler1, epoch, loss_function1, optimizer1)
+        train(cifar100_training_loader1, warmup_scheduler1, epoch, loss_function1, optimizer1)
         acc = eval_training(loss_function1, cifar100_test_loader1, epoch)
         wandb.log({"accuracy": acc})
         wandb.log({"stage": 1})
