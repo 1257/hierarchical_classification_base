@@ -276,10 +276,10 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
     cifar100_trainset2=list(cifar100_trainset2)
     cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2, False)
     
-    trainset1_new = change_labels_order(cifar100_trainset1)
-    trainset2_new = change_labels_order(cifar100_trainset2)
+    #trainset1_new = change_labels_order(cifar100_trainset1)
+    #trainset2_new = change_labels_order(cifar100_trainset2)
     
-    trainset2_super_new=change_labels_to_coarse(trainset2_new, True)
+    #trainset2_super_new=change_labels_to_coarse(trainset2_new, True)
     
     if is_new_set == False:
       cifar100_training_loader1 = DataLoader(
