@@ -272,7 +272,7 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
     #cifar100_training_loader2 = DataLoader(
           #cifar100_trainset2, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     
-    
+    cifar100_trainset1=change_labels_to_coarse(cifar100_trainset1, False) #only for transfer with 10k+10k
     cifar100_trainset2=list(cifar100_trainset2)
     cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2, False)
     
