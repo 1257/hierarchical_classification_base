@@ -204,7 +204,7 @@ if __name__ == '__main__':
         shuffle=True
     )
     
-    cifar100_test_loader3 = get_test_dataloader(
+    cifar100_test_loader3 = get_test_dataloader_with_hierarhy(
         settings.CIFAR100_TRAIN_MEAN,
         settings.CIFAR100_TRAIN_STD,
         num_workers=4,
