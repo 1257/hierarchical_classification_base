@@ -34,6 +34,10 @@ def entropy2lvl(outputs, labels, class_labels):
         coarse[i].append(func([outputs[i][81], outputs[i][69], outputs[i][41], outputs[i][89], outputs[i][85]]))
             
         
+    print("real classes:", class_labels)
+    print("real superclasses", labels) 
+    
+    
     l1=loss(outputs, labels)
     #l2=loss(torch.tensor(coarse), torch.tensor(real_superclass))
     
@@ -53,6 +57,8 @@ def entropy2lvl(outputs, labels, class_labels):
     #print("existing classes:", class_labels)
     
     l2=loss(torch.tensor(coarse), torch.tensor(class_labels))
+        
+       
     
     #print("class loss =", l1, "; superclass loss =", l2)
     return l1+l2
