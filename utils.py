@@ -333,6 +333,9 @@ def get_training_dataloader_with_hierarhy(mean, std, batch_size=16, num_workers=
       if i<21:
         print(cifar100_trainset1[i])
         
+    cifar100_global=torch.cat((cifar100_trainset1, cifar100_trainset2), 1)
+    print("global cifar 100 len:", len(cifar100_global))
+        
     #cifar100_trainset2=list(cifar100_trainset2)
     cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2, False)
     #cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset1, False) #only for transfer with 10k+10k
