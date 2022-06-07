@@ -329,7 +329,7 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
     
     
     for i in range(len(cifar100_trainset1)):
-      cifar100_trainset1[i][2]=csuperclass[cifar100_trainset1[i][1]]
+      cifar100_trainset1[i][2]=superclass[cifar100_trainset1[i][1]]
       if i<21:
         print(cifar100_trainset1[i])
         
