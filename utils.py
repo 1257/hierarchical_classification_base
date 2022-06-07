@@ -323,7 +323,8 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
     #print("two labels examples: class -> superclass")
     for i in range(len(cifar100_trainset1)):
       cifar100_trainset1[i]=list(cifar100_trainset1[i])
-      cifar100_trainset1[i].append(superclass[cifar100_trainset1[i][1]])
+      #cifar100_trainset1[i].append(superclass[cifar100_trainset1[i][1]])
+      cifar100_trainset1[i].append(cifar100_trainset1[i][1])
       cifar100_trainset1[i]=tuple(cifar100_trainset1[i])
     
     #print(cifar100_trainset1[0:20][1:3])
@@ -374,7 +375,8 @@ def get_test_dataloader_with_hierarhy(mean, std, batch_size=16, num_workers=2, s
     print("Test dataset.\n\nTwo labels examples: class -> superclass")
     for i in range(len(cifar100_test)):
       cifar100_test[i]=list(cifar100_test[i])
-      cifar100_test[i].append(superclass[cifar100_test[i][1]])
+      #cifar100_test[i].append(superclass[cifar100_test[i][1]])
+      cifar100_test[i].append(cifar100_test[i][1])
       cifar100_test[i]=tuple(cifar100_test[i])
       if i<21:
         print(cifar100_test[i][1:3])
