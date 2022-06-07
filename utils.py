@@ -301,7 +301,7 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
 
     return cifar100_training_loader2, cifar100_training_loader1
   
-def get_training_dataloader_with_hierarhy(mean, std, batch_size=16, num_workers=2, shuffle=True): 
+def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, num_workers=2, shuffle=True): 
     """ return training dataloader
     Args:
         mean: mean of cifar100 training dataset
