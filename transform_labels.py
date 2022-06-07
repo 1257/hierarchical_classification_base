@@ -19,7 +19,7 @@ class_table =[ 4,  1, 14,  8,  0,  #номер суперкласса соотв
               18,  1,  2, 15,  6,  
                0, 17,  8, 14, 13]
 
-def change_label(label):
+def label_to_coarse(label):
   return class_table[label]
 
 
