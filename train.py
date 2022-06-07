@@ -129,11 +129,13 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
         _, preds = outputs.max(1)
         
         preds_super = [superclass[preds[i]] for i in range(len(preds)) if class_labels[i]!=-1]
-        preds_super = torch.tensor(preds_super)
         class_labels = [class_labels[i] for i in range(len(class_labels)) if class_labels[i]!=-1]
         
         class_labels = torch.tensor(class_labels)
         class_labels = class_labels.cuda()
+        
+        preds_super = torch.tensor(preds_super)
+        preds_super = preds_super.cuda()
         
         correct1 += preds.eq(torch.tensor(class_labels)).sum()
         correct2 += preds_super.eq(torch.tensor(labels)).sum()
