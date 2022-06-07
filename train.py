@@ -33,16 +33,16 @@ from models.resnet import ResNet, BasicBlock
 def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, optimizer):
     start = time.time()
     net.train()
-    for batch_index, (images, labels, coarse_labels) in enumerate(cifar100_training_loader):  #coarse_labels is optional
+    for batch_index, (images, labels, coarse_labels) in enumerate(cifar100_training_loader):  #coarse_labels is optional, for two-level
         labs=labels
         
         if args.gpu:        
             labels = labels.cuda()
-            coarse_labels = coarse_labels.cuda()
+            coarse_labels = coarse_labels.cuda()  #two-level
             images = images.cuda()
 
-        print("labels:", labels)
-        print("coarse:", coarse_labels)
+        #print("labels:", labels)
+        #print("coarse:", coarse_labels)
         
         optimizer.zero_grad()
         outputs = net(images)
@@ -152,7 +152,7 @@ if __name__ == '__main__':
     
 
     #data preprocessing:
-    cifar100_training_loader1, cifar100_training_loader2 = get_training_dataloader_with_hierarhy( #get_training_dataloader or get_training_dataloader_with_hierarhy
+    cifar100_training_loader1, cifar100_training_loader2 = get_training_dataloader( #get_training_dataloader or get_training_dataloader_with_hierarhy
         False,
         settings.CIFAR100_TRAIN_MEAN,
         settings.CIFAR100_TRAIN_STD,
