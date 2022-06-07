@@ -341,7 +341,7 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
     print("single label examples: class -> superclass")
     for i in range(len(cifar100_trainset2)):
       cifar100_trainset2[i]=list(cifar100_trainset2[i])
-      cifar100_trainset2[i].append(None)
+      cifar100_trainset2[i].append(-1)
       cifar100_trainset2[i]=tuple(cifar100_trainset2[i])
       if i<21:
         print(cifar100_trainset2[i][1:3])
