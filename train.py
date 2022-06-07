@@ -169,6 +169,7 @@ if __name__ == '__main__':
         batch_size=args.b,
         shuffle=True
     )
+    cifar100_training_loader2 = cifar100_training_loader1
 
     cifar100_test_loader1, cifar100_test_loader2 = get_test_dataloader(
         False,
