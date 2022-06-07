@@ -343,8 +343,8 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
     cifar100_global1=change_labels_to_coarse(cifar100_global, False) 
     
     for i in range(20):
-      print(cifar100_global)  
-      print(cifar100_global1)
+      print(cifar100_global[i][1], cifar100_global[i][2])  
+      print(cifar100_global1[i][1], cifar100_global1[i][2])
     
     cifar100_training_loader = DataLoader(
         cifar100_global1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
