@@ -40,8 +40,8 @@ def entropy2lvl(outputs, labels, class_labels):
     
     for i in range(len(outputs)): 
         if class_labels[i]==-1:
-            class_labels[i] = torch.cat([class_labels[0:i], class_labels[i+1:]], axis=1)
-            coarse[i] = torch.cat([coarse[0:i], coarse[i+1:]], axis=1)
+            class_labels[i] = torch.cat([class_labels[0:i], class_labels[i+1:]], axis=0)
+            coarse[i] = torch.cat([coarse[0:i], coarse[i+1:]], axis=0)
             
     l2=loss(torch.tensor(coarse), torch.tensor(class_labels))
     
