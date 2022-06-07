@@ -41,8 +41,8 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, opti
             coarse_labels = coarse_labels.cuda()  #two-level
             images = images.cuda()
 
-        #print("labels:", labels)
-        #print("coarse:", coarse_labels)
+        print("labels:", labels)
+        print("coarse:", coarse_labels)
         
         optimizer.zero_grad()
         outputs = net(images)
