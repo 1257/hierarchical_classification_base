@@ -300,6 +300,53 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
           cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
     return cifar100_training_loader2, cifar100_training_loader1
+  
+def get_training_dataloader_with_hierarhy(mean, std, batch_size=16, num_workers=2, shuffle=True): 
+    """ return training dataloader
+    Args:
+        mean: mean of cifar100 training dataset
+        std: std of cifar100 training dataset
+        path: path to cifar100 training python dataset
+        batch_size: dataloader batchsize
+        num_workers: dataloader num_works
+        shuffle: whether to shuffle
+    Returns: train_data_loader:torch dataloader object
+    """
+
+    transform_train = transforms.Compose([
+        #transforms.ToPILImage(),
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomRotation(15),
+        transforms.ToTensor(),
+        transforms.Normalize(mean, std)
+    ])
+    
+    cifar100_training = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform_train)
+    cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [10000, 40000], generator=torch.Generator().manual_seed(0))
+    print('First dataset size:', len(cifar100_trainset2))
+    print('Second dataset size:', len(cifar100_trainset1))
+    
+    
+    for i in range(len(cifar100_trainset1)):
+      cifar100_trainset1[i]=cifar100_trainset1[i].cat((cifar100_trainset1[i], superclass[cifar100_trainset1[i][1]]), 1)
+      if i<21:
+        print(cifar100_trainset1[i])
+        
+    #cifar100_trainset2=list(cifar100_trainset2)
+    cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2, False)
+    #cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset1, False) #only for transfer with 10k+10k
+    
+    
+    cifar100_training_loader1 = DataLoader(
+        cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    cifar100_training_loader2 = DataLoader(
+        cifar100_trainset2_1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    
+    cifar100_training_loader = DataLoader(
+        cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+
+    return cifar100_training_loader2, cifar100_training_loader1
 
 def get_test_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader
