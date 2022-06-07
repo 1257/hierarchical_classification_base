@@ -184,17 +184,17 @@ def get_network(args):
 
 def change_labels_to_coarse(dataset, is_new_labels): #для старого набора классов, где порядок был по алфавиту, передать вторым параметром False, для нового - True
     print("is_new_labels in change to coarse is", is_new_labels)
-    #newset=list(dataset)
-    #for i in range(len(newset)):
-    #    buf=list(newset[i])
+    newset=list(dataset)
+    for i in range(len(newset)):
+        buf=list(newset[i])
         
-    #    if(is_new_labels):
-    #      buf[1]=buf[1]//5
-    #    else:
-    #      buf[1]=superclass[buf[1]]
+        if(is_new_labels):
+          buf[1]=buf[1]//5
+        else:
+          buf[1]=superclass[buf[1]]
           
-    #    newset[i]=tuple(buf)
-    newset=[superclass[dataset[i]] for i in range(len(dataset))]
+        newset[i]=tuple(buf)
+    
     return newset
 
 def change_labels_order(dataset):
@@ -320,26 +320,28 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
     cifar100_trainset1=list(cifar100_trainset1)
     cifar100_trainset2=list(cifar100_trainset2)
     
-    print("two labels examples: class -> superclass")
+    #print("two labels examples: class -> superclass")
     for i in range(len(cifar100_trainset1)):
       cifar100_trainset1[i]=list(cifar100_trainset1[i])
       cifar100_trainset1[i].append(superclass[cifar100_trainset1[i][1]])
       cifar100_trainset1[i]=tuple(cifar100_trainset1[i])
     
-    print(cifar100_trainset1[0:20][1:3])
+    #print(cifar100_trainset1[0:20][1:3])
     
-    print("single label examples: class -> superclass")
+    #print("single label examples: class -> superclass")
     for i in range(len(cifar100_trainset2)):
       cifar100_trainset2[i]=list(cifar100_trainset2[i])
       cifar100_trainset2[i].append(-1)
       cifar100_trainset2[i]=tuple(cifar100_trainset2[i])
     
-    print(cifar100_trainset2[0:20][1:3])
+    #print(cifar100_trainset2[0:20][1:3])
         
     cifar100_global=cifar100_trainset1+cifar100_trainset2
     print("global cifar 100 len:", len(cifar100_global))
-        
-    cifar100_global1=change_labels_to_coarse(cifar100_global, False)  
+    
+    print(cifar100_global)
+    cifar100_global1=change_labels_to_coarse(cifar100_global, False) 
+    print(cifar100_global1)
     
     cifar100_training_loader = DataLoader(
         cifar100_global1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
