@@ -33,13 +33,17 @@ from models.resnet import ResNet, BasicBlock
 def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, optimizer):
     start = time.time()
     net.train()
-    for batch_index, (images, labels) in enumerate(cifar100_training_loader):
+    for batch_index, (images, labels, coarse_labels) in enumerate(cifar100_training_loader):  #coarse_labels is optional
         labs=labels
         
         if args.gpu:        
             labels = labels.cuda()
+            coarse_labels = coarse_labels.cuda()
             images = images.cuda()
 
+        print("labels:", labels)
+        print("coarse:", coarse_labels)
+        
         optimizer.zero_grad()
         outputs = net(images)
         #print('labels:', labs)
