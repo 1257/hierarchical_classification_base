@@ -327,6 +327,7 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
     print('First dataset size:', len(cifar100_trainset2))
     print('Second dataset size:', len(cifar100_trainset1))
     
+    cifar100_trainset1=list(cifar100_trainset1)
     
     for i in range(len(cifar100_trainset1)):
       cifar100_trainset1[i]=list(cifar100_trainset1[i])
@@ -334,6 +335,8 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
       cifar100_trainset1[i]=tuple(cifar100_trainset1[i])
       if i<21:
         print(cifar100_trainset1[i])
+        
+    cifar100_trainset1=torch.tensor(cifar100_trainset1)
         
     cifar100_global=torch.cat((cifar100_trainset1, cifar100_trainset2), 1)
     print("global cifar 100 len:", len(cifar100_global))
