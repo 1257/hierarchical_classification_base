@@ -338,26 +338,15 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
       if i<21:
         print(cifar100_trainset1[i][1:3])
         
-    #cifar100_trainset1=torch.tensor(tuple(cifar100_trainset1))
-        
-    #cifar100_global=torch.cat((cifar100_trainset1, cifar100_trainset2), 1)
     cifar100_global=cifar100_trainset1+cifar100_trainset2
     print("global cifar 100 len:", len(cifar100_global))
         
-    #cifar100_trainset2=list(cifar100_trainset2)
-    cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2, False)
-    #cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset1, False) #only for transfer with 10k+10k
-    
-    
-    cifar100_training_loader1 = DataLoader(
-        cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-    cifar100_training_loader2 = DataLoader(
-        cifar100_trainset2_1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    cifar100_global=change_labels_to_coarse(cifar100_global, False)    
     
     cifar100_training_loader = DataLoader(
         cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
-    return cifar100_training_loader2, cifar100_training_loader1
+    return cifar100_training_loader
 
 def get_test_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader
