@@ -33,25 +33,18 @@ from models.resnet import ResNet, BasicBlock
 def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, optimizer):
     start = time.time()
     net.train()
-    for batch_index, (images, labels, coarse_labels) in enumerate(cifar100_training_loader):  #coarse_labels is optional, for two-level
+    for batch_index, (images, labels, class_labels) in enumerate(cifar100_training_loader):  #class_labels is optional, for two-level
         labs=labels
         
         if args.gpu:        
             labels = labels.cuda()
-            coarse_labels = coarse_labels.cuda()  #two-level
+            class_labels = class_labels.cuda()  #two-level
             images = images.cuda()
-
-        print("labels:", labels)
-        print("coarse:", coarse_labels)
         
         optimizer.zero_grad()
         outputs = net(images)
-        #print('labels:', labs)
-        #print('outputs:', outputs)
-        #print('labels type:', type(labs))
-        
-        loss = loss_function(outputs, labels)
-        #loss = entropy2lvl(outputs, labels)
+
+        loss = loss_function(outputs, labels, class_labels)
         
         wandb.log({"loss": loss})
         loss.backward()
