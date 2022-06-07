@@ -184,27 +184,17 @@ def get_network(args):
 
 def change_labels_to_coarse(dataset, is_new_labels): #для старого набора классов, где порядок был по алфавиту, передать вторым параметром False, для нового - True
     print("is_new_labels in change to coarse is", is_new_labels)
-    newset=list(dataset)
-    for i in range(len(newset)):
-        if i<20:
-          print("class", newset[i][1], end=" ")
-        buf=list(newset[i])
+    #newset=list(dataset)
+    #for i in range(len(newset)):
+    #    buf=list(newset[i])
         
-        if(is_new_labels):
-          buf[1]=buf[1]//5
-        else:
-          buf[1]=superclass[buf[1]]
+    #    if(is_new_labels):
+    #      buf[1]=buf[1]//5
+    #    else:
+    #      buf[1]=superclass[buf[1]]
           
-        newset[i]=tuple(buf)
-        if i<20:
-          print("changed to superclass", newset[i][1])
-        
-    print("superclasses of first 20 items:")
-    for i in range(20):
-      print(newset[i][1])
-    
-    print()
-    print()
+    #    newset[i]=tuple(buf)
+    newset=[superclass[dataset[i]] for i in range(len(dataset))]
     return newset
 
 def change_labels_order(dataset):
