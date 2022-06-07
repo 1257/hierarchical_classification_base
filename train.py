@@ -148,7 +148,7 @@ if __name__ == '__main__':
     
 
     #data preprocessing:
-    cifar100_training_loader1, cifar100_training_loader2 = get_training_dataloader(
+    cifar100_training_loader1, cifar100_training_loader2 = get_training_dataloader_with_hierarhy( #get_training_dataloader or get_training_dataloader_with_hierarhy
         False,
         settings.CIFAR100_TRAIN_MEAN,
         settings.CIFAR100_TRAIN_STD,
