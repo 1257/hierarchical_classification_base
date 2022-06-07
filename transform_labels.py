@@ -1,4 +1,4 @@
-def my_entropy(outputs, labels):
+def transform_labels(outputs, labels):
     coarse = []
     real_superclass = [None]*128
     #print(real_superclass)
