@@ -355,6 +355,41 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
         cifar100_global, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
     return cifar100_training_loader
+  
+def get_test_dataloader_with_hierarhy(mean, std, batch_size=16, num_workers=2, shuffle=True):
+    """ return training dataloader
+    Args:
+        mean: mean of cifar100 test dataset
+        std: std of cifar100 test dataset
+        path: path to cifar100 test python dataset
+        batch_size: dataloader batchsize
+        num_workers: dataloader num_works
+        shuffle: whether to shuffle
+    Returns: cifar100_test_loader:torch dataloader object
+    """
+    transform_test = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean, std)
+    ])
+
+    cifar100_test = torchvision.datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_test)
+    
+    cifar100_test=list(cifar100_test)
+    
+    print("Test dataset.\n\nTwo labels examples: class -> superclass")
+    for i in range(len(cifar100_test)):
+      cifar100_test[i]=list(cifar100_test[i])
+      cifar100_test[i].append(superclass[cifar100_test[i][1]])
+      cifar100_test[i]=tuple(cifar100_test[i])
+      if i<21:
+        print(cifar100_test[i][1:3])
+    
+    cifar100_test = change_labels_to_coarse(cifar100_test, False)
+    
+    cifar100_test_loader = DataLoader(
+        cifar100_test, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    
+    return cifar100_test_loader
 
 def get_test_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader
