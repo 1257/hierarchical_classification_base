@@ -203,6 +203,14 @@ if __name__ == '__main__':
         batch_size=args.b,
         shuffle=True
     )
+    
+    cifar100_test_loader3 = get_test_dataloader(
+        settings.CIFAR100_TRAIN_MEAN,
+        settings.CIFAR100_TRAIN_STD,
+        num_workers=4,
+        batch_size=args.b,
+        shuffle=True
+    )
 
     loss_function1 = nn.CrossEntropyLoss()
     loss_function2 = myEntropy.entropy2lvl
@@ -354,7 +362,7 @@ if __name__ == '__main__':
                 continue
 
         train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2) #loss_function2
-        acc100, acc20 = eval_training(loss_function2, cifar100_test_loader2, epoch) #loss_function2
+        acc100, acc20 = eval_training(loss_function2, cifar100_test_loader3, epoch) #loss_function2
         wandb.log({"accuracy 100": acc100})
         wandb.log({"accuracy 20": acc20})
         wandb.log({"stage": 3})
