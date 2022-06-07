@@ -30,6 +30,29 @@ from utils import get_network, get_training_dataloader, get_training_dataloader_
 import entropy_2_levels as myEntropy
 from models.resnet import ResNet, BasicBlock
 
+superclass = [ 4,  1, 14,  8,  0,  #номер суперкласса соответствует номеру в иерархии на сайте (морские млекопитающие=0, рыбы=1 и т.д.)
+               6,  7,  7, 18,  3,  #номер класса соответствует лейблам в датасете
+               3, 14,  9, 18,  7, 
+              11,  3,  9,  7, 11,  
+               6, 11,  5, 10,  7,  
+               6, 13, 15,  3, 15,
+               0, 11,  1, 10, 12, 
+              14, 16,  9, 11,  5,
+               5, 19,  8,  8, 15, 
+              13, 14, 17, 18, 10,
+              16,  4, 17,  4,  2,  
+               0, 17,  4, 18, 17,
+              10,  3,  2, 12, 12, 
+              16, 12,  1,  9, 19,
+               2, 10,  0,  1, 16, 
+              12,  9, 13, 15, 13,
+              16, 19,  2,  4,  6, 
+              19,  5,  5,  8, 19,
+              18,  1,  2, 15,  6,  
+               0, 17,  8, 14, 13]
+
+
+
 def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, optimizer):
     start = time.time()
     net.train()
@@ -89,40 +112,48 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
     net.eval()
 
     test_loss = 0.0 # cost function error
-    correct = 0.0
+    correct1 = 0.0
 
-    for (images, labels) in cifar100_test_loader:
+    for (images, labels, class_labels) in cifar100_test_loader:
 
         if args.gpu:
             images = images.cuda()
             labels = labels.cuda()
+            class_labels = class_labels.cuda()
 
         outputs = net(images)
-        loss = loss_function(outputs, labels)
+        loss = loss_function(outputs, labels, class_labels)
 
         test_loss += loss.item()
         _, preds = outputs.max(1)
-        correct += preds.eq(labels).sum()
+        
+        preds_super = [superclass[preds[i]] for i in range(len(preds)) if class_labels[i]!=-1]
+        class_labels = [class_labels[i] for i in range(len(class_labels)) if class_labels[i]!=-1]
+        
+        correct1 += preds.eq(labels).sum()
+        correct2 += preds.eq(class_labels).sum()
 
     finish = time.time()
     if args.gpu:
         print('GPU INFO.....')
         print(torch.cuda.memory_summary(), end='')
     print('Evaluating Network.....')
-    print('Test set: Epoch: {}, Average loss: {:.4f}, Accuracy: {:.4f}, Time consumed:{:.2f}s'.format(
+    print('Test set: Epoch: {}, Average loss: {:.4f}, Accuracy100: {:.4f}, Accuracy20: {:.4f}, Time consumed:{:.2f}s'.format(
         epoch,
         test_loss / len(cifar100_test_loader.dataset),
-        correct.float() / len(cifar100_test_loader.dataset),
+        correct1.float() / len(cifar100_test_loader.dataset),
+        correct2.float() / len(cifar100_test_loader.dataset),
         finish - start
     ))
     print()
 
     #add informations to tensorboard
     if tb:
-        writer.add_scalar('Test/Average loss', test_loss / len(cifar100_test_loader1.dataset), epoch)
-        writer.add_scalar('Test/Accuracy', correct.float() / len(cifar100_test_loader1.dataset), epoch)
+        writer.add_scalar('Test/Average loss', test_loss / len(cifar100_test_loader.dataset), epoch)
+        writer.add_scalar('Test/Accuracy100', correct1.float() / len(cifar100_test_loader.dataset), epoch)
+        writer.add_scalar('Test/Accuracy20', correct2.float() / len(cifar100_test_loader.dataset), epoch)
 
-    return correct.float() / len(cifar100_test_loader1.dataset)
+    return correct1.float() / len(cifar100_test_loader.dataset), correct2.float() / len(cifar100_test_loader.dataset)
 
 if __name__ == '__main__':
 
@@ -242,16 +273,17 @@ if __name__ == '__main__':
                 continue
 
         train(cifar100_training_loader1, warmup_scheduler1, epoch, loss_function1, optimizer1)
-        acc = eval_training(loss_function1, cifar100_test_loader1, epoch)
-        wandb.log({"accuracy": acc})
+        acc100, acc20 = eval_training(loss_function1, cifar100_test_loader1, epoch)
+        wandb.log({"accuracy 100": acc100})
+        wandb.log({"accuracy 20": acc20})
         wandb.log({"stage": 1})
 
         #start to save best performance model after learning rate decay to 0.01
-        if epoch > settings.MILESTONES[1] and best_acc < acc:
+        if epoch > settings.MILESTONES[1] and best_acc < acc100:
             weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
             print('saving weights file to {}'.format(weights_path))
             torch.save(net.state_dict(), weights_path)
-            best_acc = acc
+            best_acc = acc100
             continue
 
         if not epoch % settings.SAVE_EPOCH:
@@ -280,16 +312,17 @@ if __name__ == '__main__':
                 continue
 
         train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function1, optimizer2)  #loss_function2
-        acc = eval_training(loss_function1, cifar100_test_loader2, epoch) #loss_function2
-        wandb.log({"accuracy": acc})
+        acc100, acc20 = eval_training(loss_function1, cifar100_test_loader2, epoch) #loss_function2
+        wandb.log({"accuracy 100": acc100})
+        wandb.log({"accuracy 20": acc20})
         wandb.log({"stage": 2})
 
         #start to save best performance model after learning rate decay to 0.01
-        if epoch > settings.MILESTONES1[1] and best_acc < acc:
+        if epoch > settings.MILESTONES1[1] and best_acc < acc100:
             weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
             print('saving weights file to {}'.format(weights_path))
             torch.save(net.state_dict(), weights_path)
-            best_acc = acc
+            best_acc = acc100
             continue
 
         if not epoch % settings.SAVE_EPOCH:
@@ -321,8 +354,9 @@ if __name__ == '__main__':
                 continue
 
         train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2) #loss_function2
-        acc = eval_training(loss_function2, cifar100_test_loader2, epoch) #loss_function2
-        wandb.log({"accuracy": acc})
+        acc100, acc20 = eval_training(loss_function2, cifar100_test_loader2, epoch) #loss_function2
+        wandb.log({"accuracy 100": acc100})
+        wandb.log({"accuracy 20": acc20})
         wandb.log({"stage": 3})
 
         #start to save best performance model after learning rate decay to 0.01
