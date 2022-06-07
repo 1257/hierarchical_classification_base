@@ -113,6 +113,7 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
 
     test_loss = 0.0 # cost function error
     correct1 = 0.0
+    correct2 = 0.0
 
     for (images, labels, class_labels) in cifar100_test_loader:
 
