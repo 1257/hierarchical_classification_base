@@ -154,7 +154,8 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
     print('Test set: Epoch: {}, Average loss: {:.4f}, Accuracy100: {:.4f}, Accuracy20: {:.4f}, Time consumed:{:.2f}s'.format(
         epoch,
         test_loss / len(cifar100_test_loader.dataset),
-        correct1.float() / len(cifar100_test_loader.dataset),
+        #correct1.float() / len(cifar100_test_loader.dataset),
+        correct1.float() / 10000.0,
         correct2.float() / len(cifar100_test_loader.dataset),
         finish - start
     ))
@@ -163,10 +164,12 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
     #add informations to tensorboard
     if tb:
         writer.add_scalar('Test/Average loss', test_loss / len(cifar100_test_loader.dataset), epoch)
-        writer.add_scalar('Test/Accuracy100', correct1.float() / len(cifar100_test_loader.dataset), epoch)
+        #writer.add_scalar('Test/Accuracy100', correct1.float() / len(cifar100_test_loader.dataset), epoch)
+        writer.add_scalar('Test/Accuracy100', correct1.float() / 10000.0, epoch)
         writer.add_scalar('Test/Accuracy20', correct2.float() / len(cifar100_test_loader.dataset), epoch)
 
-    return correct1.float() / len(cifar100_test_loader.dataset), correct2.float() / len(cifar100_test_loader.dataset)
+    #return correct1.float() / len(cifar100_test_loader.dataset), correct2.float() / len(cifar100_test_loader.dataset)
+    return correct1.float() / 10000.0, correct2.float() / len(cifar100_test_loader.dataset)
 
 if __name__ == '__main__':
 
