@@ -4,14 +4,12 @@ import torch
 def entropy2lvl(outputs, labels, class_labels):
     loss = nn.CrossEntropyLoss()
     coarse = []
-    print(coarse)
     real_superclass = [None]*len(outputs)
     #print(real_superclass)
     func=max
     
     for i in range(len(outputs)):
         coarse.append([])
-    print(coarse)
 
     for i in range(len(outputs)):
         coarse[i].append(func([outputs[i][72], outputs[i][4], outputs[i][95], outputs[i][30], outputs[i][55]]))
@@ -36,9 +34,8 @@ def entropy2lvl(outputs, labels, class_labels):
         coarse[i].append(func([outputs[i][81], outputs[i][69], outputs[i][41], outputs[i][89], outputs[i][85]]))
             
         
-    print("real classes:", class_labels)
-    print("real superclasses", labels) 
-    
+    #print("real classes:", class_labels)
+    #print("real superclasses", labels) 
     
     l1=loss(torch.tensor(coarse).cuda(), labels)    
     
@@ -52,6 +49,9 @@ def entropy2lvl(outputs, labels, class_labels):
     print("all classes count in batch:", len(class_labels1))
     print("type of outputs1 is", type(outputs1))
     print("type of class_labels1 is", type(class_labels1))
+    
+    outputs1=torch.as_tensor(outputs1)
+    class_labels1=torch.as_tensor(class_labels1)
     
     #print(type(coarse))
     #coarse1=torch.tensor(coarse)
