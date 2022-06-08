@@ -50,6 +50,8 @@ def entropy2lvl(outputs, labels, class_labels):
     
     
     print("all classes count in batch:", len(class_labels1))
+    print("type of outputs1 is", type(outputs1))
+    print("type of class_labels1 is", type(class_labels1))
     
     #print(type(coarse))
     #coarse1=torch.tensor(coarse)
