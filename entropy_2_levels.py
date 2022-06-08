@@ -50,7 +50,9 @@ def entropy2lvl(outputs, labels, class_labels):
     
     #print("all classes:", class_labels)
     
-    coarse=list(coarse)
+    #coarse=list(coarse)
+    coarse=torch.tensor(coarse)
+    coarse=coarse.cuda()
     coarse=[coarse[i] for i in range(len(class_labels)) if class_labels[i]!=-1]
     class_labels=list(class_labels)
     class_labels=[class_labels[i] for i in range(len(class_labels)) if class_labels[i]!=-1]
