@@ -384,11 +384,11 @@ if __name__ == '__main__':
         wandb.log({"stage": 3})
 
         #start to save best performance model after learning rate decay to 0.01
-        if epoch > settings.MILESTONES2[1] and best_acc < acc:
+        if epoch > settings.MILESTONES[1] and best_acc < acc100:
             weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
             print('saving weights file to {}'.format(weights_path))
             torch.save(net.state_dict(), weights_path)
-            best_acc = acc
+            best_acc = acc100
             continue
 
         if not epoch % settings.SAVE_EPOCH:
