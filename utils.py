@@ -387,8 +387,8 @@ def get_test_dataloader_with_hierarhy(mean, std, batch_size=16, num_workers=2, s
         cifar100_test1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     
     for i in range(21):
-      print(cifar100_test[1], cifar100_test[2])
-      print(cifar100_test1[1], cifar100_test1[2])
+      print(cifar100_test[i][1], cifar100_test[i][2])
+      print(cifar100_test1[i][1], cifar100_test1[i][2])
       print()
     
     return cifar100_test_loader
