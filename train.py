@@ -140,11 +140,11 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
         correct1 += preds.eq(torch.tensor(class_labels)).sum()
         correct2 += preds_super.eq(torch.tensor(labels)).sum()
 
-        print("real classes:", class_labels)
-        print("preds:", preds)
+        #print("real classes:", class_labels)
+        #print("preds:", preds)
         
-        print("real superclasses:", labels)
-        print("preds_super:", preds_super)
+        #print("real superclasses:", labels)
+        #print("preds_super:", preds_super)
         
     finish = time.time()
     if args.gpu:
