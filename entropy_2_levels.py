@@ -40,17 +40,16 @@ def entropy2lvl(outputs, labels, class_labels):
     print("real superclasses", labels) 
     
     
-    l1=loss(torch.tensor(coarse).cuda(), labels)
-    #l1=loss(outputs, class_labels)
-    #l2=loss(torch.tensor(coarse), torch.tensor(real_superclass))
+    l1=loss(torch.tensor(coarse).cuda(), labels)    
+    
+    class_labels1=list(class_labels)
+    outputs1=list(outputs)
+    
+    outputs1=[outputs1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
+    class_labels1=[class_labels1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
     
     
-    for i in range(len(outputs)): 
-        if class_labels[i]==-1:
-            class_labels[i] = torch.cat([class_labels[0:i], class_labels[i+1:]], axis=0)
-            outputs[i] = torch.cat([outputs[0:i], outputs[i+1:]], axis=0)
-    
-    print("all classes:", class_labels)
+    print("all classes:", class_labels1)
     
     #print(type(coarse))
     #coarse1=torch.tensor(coarse)
