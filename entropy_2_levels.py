@@ -49,7 +49,7 @@ def entropy2lvl(outputs, labels, class_labels):
     class_labels1=[class_labels1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
     
     
-    print("all classes:", class_labels1)
+    print("all classes count in batch:", len(class_labels1))
     
     #print(type(coarse))
     #coarse1=torch.tensor(coarse)
@@ -61,7 +61,7 @@ def entropy2lvl(outputs, labels, class_labels):
     #print("existing classes:", class_labels)
     
     #l2=loss(torch.tensor(coarse), torch.tensor(class_labels))
-    l2=loss(torch.tensor(coarse).cuda(), torch.tensor(lables).cuda())
+    l2=loss(torch.tensor(outputs1).cuda(), torch.tensor(class_labels1).cuda())
         
     #print("class loss =", l1, "; superclass loss =", l2)
     return l1+l2
