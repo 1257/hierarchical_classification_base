@@ -40,7 +40,7 @@ def entropy2lvl(outputs, labels, class_labels):
     print("real superclasses", labels) 
     
     
-    l1=loss(torch.tensor(coarse), labels)
+    l1=loss(torch.tensor(coarse).cuda(), labels)
     #l1=loss(outputs, class_labels)
     #l2=loss(torch.tensor(coarse), torch.tensor(real_superclass))
     
