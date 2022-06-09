@@ -33,10 +33,7 @@ def entropy2lvl(outputs, labels, class_labels):
         coarse[i].append(func([outputs[i][8], outputs[i][58], outputs[i][90], outputs[i][13], outputs[i][48]]))
         coarse[i].append(func([outputs[i][81], outputs[i][69], outputs[i][41], outputs[i][89], outputs[i][85]]))
             
-        
-    #print("real classes:", class_labels)
-    #print("real superclasses", labels) 
-    
+            
     l1=loss(torch.tensor(coarse).cuda(), labels)    
     
     class_labels1=list(class_labels)
@@ -46,10 +43,6 @@ def entropy2lvl(outputs, labels, class_labels):
     class_labels1=[class_labels1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
     
     
-    #print("all classes count in batch:", len(class_labels1))
-    #print("type of outputs1 is", type(outputs1))
-    #print("type of class_labels1 is", type(class_labels1))
-    
     i=0
     while i<len(outputs):
         if class_labels[i]==-1:
@@ -57,22 +50,10 @@ def entropy2lvl(outputs, labels, class_labels):
             outputs = torch.cat([outputs[:i], outputs[i+1:]])
         else:
             i=i+1
-    #print("all classes count in batch:", len(class_labels))
     
-    #print(type(coarse))
-    #coarse1=torch.tensor(coarse)
-    #coarse1=coarse.cuda()
-    #labels1=list(labels)
-    #coarse=[coarse[i] for i in range(len(labels1)) if labels1[i]!=-1]
-    #labels2=[labels1[i] for i in range(len(labels1)) if labels1[i]!=-1]
-    
-    #print("existing classes:", class_labels)
-    
-    #l2=loss(torch.tensor(coarse), torch.tensor(class_labels))
     l2=loss(outputs, class_labels)
         
-    #print("class loss =", l1, "; superclass loss =", l2)
-    return l1+l2
+    return 0.7*l1+0.3*l2
 
 
 def modifiedEntropy2lvl(outputs, labels):
