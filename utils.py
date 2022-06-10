@@ -373,7 +373,7 @@ def get_test_dataloader_with_hierarhy(mean, std, batch_size=16, num_workers=2, s
       cifar100_test[i]=tuple(cifar100_test[i])
       
     
-    cifar100_test1 = change_labels_to_coarse(cifar100_test, False)
+    cifar100_test1 = change_labels_to_coarse(cifar100_test)
     
     cifar100_test_loader = DataLoader(
         cifar100_test1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
@@ -385,7 +385,7 @@ def get_test_dataloader_with_hierarhy(mean, std, batch_size=16, num_workers=2, s
     
     return cifar100_test_loader
 
-def get_test_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2, shuffle=True):
+def get_test_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader
     Args:
         mean: mean of cifar100 test dataset
@@ -403,13 +403,7 @@ def get_test_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2, shu
 
     cifar100_test = torchvision.datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_test)
     
-    if is_new_set:
-      print("using new set in testloader")
-      cifar100_test=change_labels_order(cifar100_test)
-    else:
-      print("using old set in testloader")
-    
-    cifar100_test_coarse = change_labels_to_coarse(cifar100_test, is_new_set)
+    cifar100_test_coarse = change_labels_to_coarse(cifar100_test)
     
     cifar100_test_loader1 = DataLoader(
         cifar100_test, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
