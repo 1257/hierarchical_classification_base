@@ -26,6 +26,9 @@ MILESTONES = [60, 120, 160]
 MILESTONES1 = [6, 11, 16]
 MILESTONES2 = [20, 40, 60]
 
+COMPLEX_TRAINSET_SIZE = 10000
+
+
 
 #initial learning rate
 #INIT_LR = 0.1
