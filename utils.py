@@ -183,17 +183,11 @@ def get_network(args):
 
     return net
 
-def change_labels_to_coarse(dataset, is_new_labels): #для старого набора классов, где порядок был по алфавиту, передать вторым параметром False, для нового - True
-    print("is_new_labels in change to coarse is", is_new_labels)
+def change_labels_to_coarse(dataset): #для старого набора классов, где порядок был по алфавиту, передать вторым параметром False, для нового - True
     newset=list(dataset)
     for i in range(len(newset)):
         buf=list(newset[i])
-        
-        if(is_new_labels):
-          buf[1]=buf[1]//5
-        else:
-          buf[1]=superclass[buf[1]]
-          
+        buf[1]=superclass[buf[1]] 
         newset[i]=tuple(buf)
     
     return newset
@@ -222,7 +216,7 @@ def change_labels_order(dataset):
     
   return newset
   
-def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2, shuffle=True): #True в первом параметре, если порядок классов изменен
+def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True): #True в первом параметре, если порядок классов изменен
     """ return training dataloader
     Args:
         mean: mean of cifar100 training dataset
@@ -248,7 +242,7 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
     print('First dataset size:', len(cifar100_trainset2)) #trainset2 - with coarse 
     print('Second dataset size:', len(cifar100_trainset1)) #trainset1 - with classes
     
-    cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2, False)
+    cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2)
    
     cifar100_training_loader1 = DataLoader(
           cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
