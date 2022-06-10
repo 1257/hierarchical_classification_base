@@ -194,12 +194,12 @@ if __name__ == '__main__':
     #data preprocessing:
     if settings.EXPERIMENT == "baseline":
         cifar100_training_loader2 = get_single_training_dataloader(
-            change_to_superclasses=False,
             settings.CIFAR100_TRAIN_MEAN,
             settings.CIFAR100_TRAIN_STD,
             num_workers=4,
             batch_size=args.b,
-            shuffle=True
+            shuffle=True,
+            change_to_superclasses=False
         )
         
     elif settings.EXPERIMENT == "finetune ":
