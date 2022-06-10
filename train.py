@@ -192,35 +192,37 @@ if __name__ == '__main__':
     
 
     #data preprocessing:
-    #cifar100_training_loader1, cifar100_training_loader2 = get_training_dataloader( #get_training_dataloader or get_training_dataloader_with_hierarhy
-        #False,
-        #settings.CIFAR100_TRAIN_MEAN,
-        #settings.CIFAR100_TRAIN_STD,
-        #num_workers=4,
-        #batch_size=args.b,
-        #shuffle=True
-    #)
-    
-    cifar100_training_loader1 = get_training_dataloader_with_hierarhy( #get_training_dataloader or get_training_dataloader_with_hierarhy
-        False,
+    if settings.EXPERIMENT == "baseline":
+        cifar100_training_loader2 = get_single_training_dataloader(
+            change_to_superclasses=False,
+            settings.CIFAR100_TRAIN_MEAN,
+            settings.CIFAR100_TRAIN_STD,
+            num_workers=4,
+            batch_size=args.b,
+            shuffle=True
+        )
+        
+    elif settings.EXPERIMENT == "finetune ":
+        cifar100_training_loader1, cifar100_training_loader2 = get_training_dataloader( #loader1 - superclasses, loader2 - classes
         settings.CIFAR100_TRAIN_MEAN,
-        settings.CIFAR100_TRAIN_STD,
-        num_workers=4,
-        batch_size=args.b,
-        shuffle=True
-    )
-    cifar100_training_loader2 = cifar100_training_loader1
-
-    cifar100_test_loader1, cifar100_test_loader2 = get_test_dataloader(
-        False,
-        settings.CIFAR100_TRAIN_MEAN,
-        settings.CIFAR100_TRAIN_STD,
-        num_workers=4,
-        batch_size=args.b,
-        shuffle=True
-    )
+            settings.CIFAR100_TRAIN_STD,
+            num_workers=4,
+            batch_size=args.b,
+            shuffle=True
+        )
+        
+    elif settings.EXPERIMENT == "hierarchy":
+        cifar100_training_loader2 = get_training_dataloader_with_hierarhy(
+            False,
+            settings.CIFAR100_TRAIN_MEAN,
+            settings.CIFAR100_TRAIN_STD,
+            num_workers=4,
+            batch_size=args.b,
+            shuffle=True
+        )
     
-    cifar100_test_loader3 = get_test_dataloader_with_hierarhy(
+    #get testloader with classes and superclasses (to get accuracy at 20 and 100 classes)
+    cifar100_test_loader1 = get_test_dataloader_with_hierarhy(
         settings.CIFAR100_TRAIN_MEAN,
         settings.CIFAR100_TRAIN_STD,
         num_workers=4,
@@ -230,10 +232,9 @@ if __name__ == '__main__':
 
     loss_function1 = nn.CrossEntropyLoss()
     loss_function2 = myEntropy.entropy2lvl
-    loss_function3 = myEntropy.modifiedEntropy2lvl
     
     optimizer1 = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
-    train_scheduler = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
+    train_scheduler1 = optim.lr_scheduler.MultiStepLR(optimizer1, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay
     iter_per_epoch1 = len(cifar100_training_loader1)
     warmup_scheduler1 = WarmUpLR(optimizer1, iter_per_epoch1 * args.warm)
 
@@ -286,34 +287,35 @@ if __name__ == '__main__':
         resume_epoch = last_epoch(os.path.join(settings.CHECKPOINT_PATH, args.net, recent_folder))
 
     wandb.log({"stage": 1})
-    # step 1 - pre-learning
+    # step 1
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(51, 1):  #51
-        if epoch > args.warm:
-            train_scheduler.step(epoch)
+    if settings.EXPERIMENT == "finetune ":
+        for epoch in range(1, 51):  #51
+            if epoch > args.warm:
+                train_scheduler1.step(epoch)
 
-        if args.resume:
-            if epoch <= resume_epoch:
+            if args.resume:
+                if epoch <= resume_epoch:
+                    continue
+
+            train(cifar100_training_loader1, warmup_scheduler1, epoch, loss_function1, optimizer1)
+            acc100, acc20 = eval_training(loss_function1, cifar100_test_loader1, epoch)
+            wandb.log({"accuracy 100": acc100})
+            wandb.log({"accuracy 20": acc20})
+            wandb.log({"stage": 1})
+
+            #start to save best performance model after learning rate decay to 0.01
+            if epoch > settings.MILESTONES[1] and best_acc < acc100:
+                weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
+                print('saving weights file to {}'.format(weights_path))
+                torch.save(net.state_dict(), weights_path)
+                best_acc = acc100
                 continue
 
-        train(cifar100_training_loader1, warmup_scheduler1, epoch, loss_function1, optimizer1)
-        acc100, acc20 = eval_training(loss_function1, cifar100_test_loader1, epoch)
-        wandb.log({"accuracy 100": acc100})
-        wandb.log({"accuracy 20": acc20})
-        wandb.log({"stage": 1})
-
-        #start to save best performance model after learning rate decay to 0.01
-        if epoch > settings.MILESTONES[1] and best_acc < acc100:
-            weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
-            print('saving weights file to {}'.format(weights_path))
-            torch.save(net.state_dict(), weights_path)
-            best_acc = acc100
-            continue
-
-        if not epoch % settings.SAVE_EPOCH:
-            weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='regular')
-            print('saving weights file to {}'.format(weights_path))
-            torch.save(net.state_dict(), weights_path)
+            if not epoch % settings.SAVE_EPOCH:
+                weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='regular')
+                print('saving weights file to {}'.format(weights_path))
+                torch.save(net.state_dict(), weights_path)
 
     net.set_output_size(100)
     net.freeze()
@@ -322,54 +324,55 @@ if __name__ == '__main__':
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer2, milestones=settings.MILESTONES1, gamma=0.2) #learning rate decay
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
-    print(filter(lambda x: x.requires_grad, net.parameters()))
+    #print(filter(lambda x: x.requires_grad, net.parameters()))
     
     wandb.log({"stage": 2})
-    # step 2 -learning new output
+    # step 2
     #for epoch in range(1, settings.EPOCH + 1):
-    for epoch in range(21, 1):  #21
-        if epoch > args.warm:
-            train_scheduler2.step(epoch)
+    if settings.EXPERIMENT == "finetune ":
+        for epoch in range(1, 21):  #21
+            if epoch > args.warm:
+                train_scheduler2.step(epoch)
 
-        if args.resume:
-            if epoch <= resume_epoch:
+            if args.resume:
+                if epoch <= resume_epoch:
+                    continue
+
+            train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2)  #loss_function2
+            acc100, acc20 = eval_training(loss_function2, cifar100_test_loader, epoch) #loss_function2
+            wandb.log({"accuracy 100": acc100})
+            wandb.log({"accuracy 20": acc20})
+            wandb.log({"stage": 2})
+
+            #start to save best performance model after learning rate decay to 0.01
+            if epoch > settings.MILESTONES1[1] and best_acc < acc100:
+                weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
+                print('saving weights file to {}'.format(weights_path))
+                torch.save(net.state_dict(), weights_path)
+                best_acc = acc100
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function1, optimizer2)  #loss_function2
-        acc100, acc20 = eval_training(loss_function1, cifar100_test_loader2, epoch) #loss_function2
-        wandb.log({"accuracy 100": acc100})
-        wandb.log({"accuracy 20": acc20})
-        wandb.log({"stage": 2})
-
-        #start to save best performance model after learning rate decay to 0.01
-        if epoch > settings.MILESTONES1[1] and best_acc < acc100:
-            weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='best')
-            print('saving weights file to {}'.format(weights_path))
-            torch.save(net.state_dict(), weights_path)
-            best_acc = acc100
-            continue
-
-        if not epoch % settings.SAVE_EPOCH:
-            weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='regular')
-            print('saving weights file to {}'.format(weights_path))
-            torch.save(net.state_dict(), weights_path)
+            if not epoch % settings.SAVE_EPOCH:
+                weights_path = checkpoint_path.format(net=args.net, epoch=epoch, type='regular')
+                print('saving weights file to {}'.format(weights_path))
+                torch.save(net.state_dict(), weights_path)
             
-        #net.print_conv5_x()
+        
     
     net.conv5_x.requires_grad_(True)
     net.conv4_x.requires_grad_(True)
     net.conv3_x.requires_grad_(True)
     net.conv2_x.requires_grad_(True)
     net.conv1.requires_grad_(True)
+    
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer2, milestones=settings.MILESTONES, gamma=0.2) #learning rate decay, MILESTONES2
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
-    print(filter(lambda x: x.requires_grad, net.parameters()))
+    #print(filter(lambda x: x.requires_grad, net.parameters()))
     
     wandb.log({"stage": 3})
-    # step 3 -learning new output and last block
+    # step 3
     for epoch in range(1, settings.EPOCH + 1):
-    #for epoch in range(1, 61):
         if epoch > args.warm:
             train_scheduler2.step(epoch)
 
@@ -378,7 +381,7 @@ if __name__ == '__main__':
                 continue
 
         train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2) #loss_function2
-        acc100, acc20 = eval_training(loss_function2, cifar100_test_loader3, epoch) #loss_function2
+        acc100, acc20 = eval_training(loss_function2, cifar100_test_loader, epoch) #loss_function2
         wandb.log({"accuracy 100": acc100})
         wandb.log({"accuracy 20": acc20})
         wandb.log({"stage": 3})
