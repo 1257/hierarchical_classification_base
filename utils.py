@@ -251,7 +251,7 @@ def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=Tru
 
     return cifar100_training_loader2, cifar100_training_loader1
   
-  def get_single_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True, change_to_superclasses):
+def get_single_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True, change_to_superclasses):
     """ return training dataloader
     Args:
         mean: mean of cifar100 training dataset
@@ -262,7 +262,6 @@ def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=Tru
         shuffle: whether to shuffle
     Returns: train_data_loader:torch dataloader object
     """
-
     transform_train = transforms.Compose([
         #transforms.ToPILImage(),
         transforms.RandomCrop(32, padding=4),
