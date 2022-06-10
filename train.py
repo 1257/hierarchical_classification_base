@@ -53,7 +53,7 @@ superclass = [ 4,  1, 14,  8,  0,  #номер суперкласса соотв
 
 
 
-def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, optimizer):
+def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, optimizer, useClasses, useSuperclasses):
     start = time.time()
     net.train()
     for batch_index, (images, labels, class_labels) in enumerate(cifar100_training_loader):  #class_labels is optional, for two-level
@@ -67,7 +67,9 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, opti
         optimizer.zero_grad()
         outputs = net(images)
 
-        loss = loss_function(outputs, labels, class_labels)
+        
+        loss = loss_function(outputs, labels, class_labels, use_superclasses=useSuperclasses, use_classes=useClasses)
+
         
         wandb.log({"loss": loss})
         loss.backward()
@@ -299,7 +301,7 @@ if __name__ == '__main__':
                 if epoch <= resume_epoch:
                     continue
 
-            train(cifar100_training_loader1, warmup_scheduler1, epoch, loss_function1, optimizer1)
+            train(cifar100_training_loader1, warmup_scheduler1, epoch, loss_function1, optimizer1, useSuperclasses=True, useClasses=False)
             acc100, acc20 = eval_training(loss_function1, cifar100_test_loader1, epoch)
             wandb.log({"accuracy 100": acc100})
             wandb.log({"accuracy 20": acc20})
@@ -339,7 +341,7 @@ if __name__ == '__main__':
                 if epoch <= resume_epoch:
                     continue
 
-            train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2)  #loss_function2
+            train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2, useSuperclasses=False, useClasses=True)  #loss_function2
             acc100, acc20 = eval_training(loss_function2, cifar100_test_loader, epoch) #loss_function2
             wandb.log({"accuracy 100": acc100})
             wandb.log({"accuracy 20": acc20})
@@ -381,7 +383,7 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2) #loss_function2
+        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2, useSuperclasses=True, useClasses=True) #loss_function2
         acc100, acc20 = eval_training(loss_function2, cifar100_test_loader, epoch) #loss_function2
         wandb.log({"accuracy 100": acc100})
         wandb.log({"accuracy 20": acc20})
