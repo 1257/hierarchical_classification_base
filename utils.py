@@ -291,6 +291,39 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
 
     return cifar100_training_loader2, cifar100_training_loader1
   
+  def get_single_training_dataloader(size=50000, mean, std, batch_size=16, num_workers=2, shuffle=True):
+    """ return training dataloader
+    Args:
+        mean: mean of cifar100 training dataset
+        std: std of cifar100 training dataset
+        path: path to cifar100 training python dataset
+        batch_size: dataloader batchsize
+        num_workers: dataloader num_works
+        shuffle: whether to shuffle
+    Returns: train_data_loader:torch dataloader object
+    """
+
+    transform_train = transforms.Compose([
+        #transforms.ToPILImage(),
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomRotation(15),
+        transforms.ToTensor(),
+        transforms.Normalize(mean, std)
+    ])
+    
+    cifar100_training = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform_train)
+    
+    if size<50000:
+      cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [size, 50000-size], generator=torch.Generator().manual_seed(0))
+    else:
+      cifar100_trainset1 = cifar100_training
+    
+    cifar100_training_loader1 = DataLoader(
+          cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+    
+    return cifar100_training_loader1
+  
 def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, num_workers=2, shuffle=True): 
     """ return training dataloader
     Args:
