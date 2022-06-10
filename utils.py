@@ -278,7 +278,7 @@ def get_single_training_dataloader(change_to_superclasses, mean, std, batch_size
     #else:
       #cifar100_trainset1 = cifar100_training 
       
-    
+    cifar100_trainset1=list(cifar100_trainset1)
     for i in range(len(cifar100_trainset1)):
       cifar100_trainset1[i]=list(cifar100_trainset1[i])
       cifar100_trainset1[i].append(cifar100_trainset1[i][1])
