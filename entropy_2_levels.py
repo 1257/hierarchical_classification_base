@@ -44,6 +44,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     
     
     i=0
+    i=i.cuda()
     while i<len(outputs):
         if class_labels[i]==-1:
             class_labels = torch.cat([class_labels[:i], class_labels[i+1:]])
