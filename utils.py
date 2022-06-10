@@ -276,10 +276,7 @@ def get_single_training_dataloader(mean, std, batch_size=16, num_workers=2, shuf
     if settings.COMPLEX_TRAINSET_SIZE<50000:
       cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [settings.COMPLEX_TRAINSET_SIZE, 50000-settings.COMPLEX_TRAINSET_SIZE], generator=torch.Generator().manual_seed(0))
     else:
-      cifar100_trainset1 = cifar100_training
-      
-    if settings.EXPERIMENT == "baseline":
-      
+      cifar100_trainset1 = cifar100_training      
     
     cifar100_training_loader1 = DataLoader(
           cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
