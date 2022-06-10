@@ -276,7 +276,13 @@ def get_single_training_dataloader(change_to_superclasses, mean, std, batch_size
     if settings.COMPLEX_TRAINSET_SIZE<50000:
       cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [settings.COMPLEX_TRAINSET_SIZE, 50000-settings.COMPLEX_TRAINSET_SIZE], generator=torch.Generator().manual_seed(0))
     else:
-      cifar100_trainset1 = cifar100_training      
+      cifar100_trainset1 = cifar100_training 
+      
+    
+    for i in range(len(cifar100_trainset1)):
+      cifar100_trainset1[i]=list(cifar100_trainset1[i])
+      cifar100_trainset1[i].append(cifar100_trainset1[i][1])
+      cifar100_trainset1[i]=tuple(cifar100_trainset1[i])
     
     cifar100_training_loader1 = DataLoader(
           cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
