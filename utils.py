@@ -6,6 +6,7 @@ import os
 import sys
 import re
 import datetime
+from conf import settings
 
 import numpy
 
@@ -243,55 +244,20 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
     ])
     
     cifar100_training = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform_train)
-    cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [10000, 40000], generator=torch.Generator().manual_seed(0))
-    print('First dataset size:', len(cifar100_trainset2))
-    print('Second dataset size:', len(cifar100_trainset1))
+    cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [settings.COMPLEX_TRAINSET_SIZE, 50000-settings.COMPLEX_TRAINSET_SIZE], generator=torch.Generator().manual_seed(0))
+    print('First dataset size:', len(cifar100_trainset2)) #trainset2 - with coarse 
+    print('Second dataset size:', len(cifar100_trainset1)) #trainset1 - with classes
     
-    
-    #if is_new_set:
-      #print("using new set in trainloader")
-      #cifar100_trainset1 = change_labels_order(cifar100_trainset1)
-      #cifar100_trainset2 = change_labels_order(cifar100_trainset2)
-    #else:
-      #print("using old set in trainloader")
-    
-    #cifar100_trainset2 = change_labels_to_coarse(cifar100_trainset2, is_new_set)
-    
-    #cifar100_training_loader1 = DataLoader(
-          #cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-    #cifar100_training_loader2 = DataLoader(
-          #cifar100_trainset2, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-    
-    
-    #cifar100_trainset2=list(cifar100_trainset2)
     cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset2, False)
-    #cifar100_trainset2_1=change_labels_to_coarse(cifar100_trainset1, False) #only for transfer with 10k+10k
-    
-    #trainset1_new = change_labels_order(cifar100_trainset1)
-    #trainset2_new = change_labels_order(cifar100_trainset2)
-    
-    #trainset2_super_new=change_labels_to_coarse(trainset2_new, True)
-    
-    if is_new_set == False:
-      cifar100_training_loader1 = DataLoader(
+   
+    cifar100_training_loader1 = DataLoader(
           cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-      cifar100_training_loader2 = DataLoader(
+    cifar100_training_loader2 = DataLoader(
           cifar100_trainset2_1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-    
-      cifar100_training_loader = DataLoader(
-          cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-    else:
-        cifar100_training_loader1 = DataLoader(
-          trainset1_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-        cifar100_training_loader2 = DataLoader(
-          trainset2_super_new, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
-    
-        cifar100_training_loader = DataLoader(
-          cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
     return cifar100_training_loader2, cifar100_training_loader1
   
-  def get_single_training_dataloader(size=50000, mean, std, batch_size=16, num_workers=2, shuffle=True):
+  def get_single_training_dataloader(change_to_superclasses, mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader
     Args:
         mean: mean of cifar100 training dataset
@@ -314,10 +280,13 @@ def get_training_dataloader(is_new_set, mean, std, batch_size=16, num_workers=2,
     
     cifar100_training = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform_train)
     
-    if size<50000:
-      cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [size, 50000-size], generator=torch.Generator().manual_seed(0))
+    if settings.COMPLEX_TRAINSET_SIZE<50000:
+      cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [settings.COMPLEX_TRAINSET_SIZE, 50000-settings.COMPLEX_TRAINSET_SIZE], generator=torch.Generator().manual_seed(0))
     else:
       cifar100_trainset1 = cifar100_training
+      
+    if settings.EXPERIMENT == "baseline":
+      
     
     cifar100_training_loader1 = DataLoader(
           cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
@@ -346,7 +315,7 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
     ])
     
     cifar100_training = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform_train)
-    cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [10000, 40000], generator=torch.Generator().manual_seed(0))
+    cifar100_trainset1, cifar100_trainset2 = torch.utils.data.random_split(cifar100_training, [settings.COMPLEX_TRAINSET_SIZE, 50000-settings.COMPLEX_TRAINSET_SIZE], generator=torch.Generator().manual_seed(0))
     print('First dataset size:', len(cifar100_trainset2))
     print('Second dataset size:', len(cifar100_trainset1))
     
