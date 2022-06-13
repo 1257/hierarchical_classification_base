@@ -46,6 +46,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     outs = (torch.tensor(outs)).cuda()
     print("filtered: ", outputs[indices])
     print("filtered[0]: ", outs)
+    print("indexed labels: ", class_labels[indices])
     l2=loss(outs, class_labels[indices])   #loss on classes
     
     if use_superclasses and use_classes:
