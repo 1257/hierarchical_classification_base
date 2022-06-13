@@ -40,20 +40,24 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     
     mask = class_labels >= 0
     indices = torch.nonzero(mask)
-    #print("all: ", outputs)
-    outs = outputs[indices, : ]
+
+    outs = outputs.clone()
+    for i in range(len(labels)):
+        if i not in indeces:
+            outs = torch.cat([outs[:i], outs[i+1:]])
+            
     #outs.reshape([ len(indices), 100])
     outs = (torch.tensor(outs)).cuda()
-    res = []
-    for i in range(len(indices)):
-        res.append(outs[i][0])
-    res = torch.tensor(res).cuda()
+    #res = []
+    #for i in range(len(indices)):
+    #    res.append(outs[i][0])
+    #res = torch.tensor(res).cuda()
         
     print("outs size:", outs.size())
-    print("res size:", res.size())
+    #print("res size:", res.size())
     
     #print("filtered: ", outputs[indices, : ])
-    print("filtered[0]: ", outs)
+    print("outs: ", outs)
     new_labels = torch.tensor(class_labels[indices]).cuda()
     l2=loss(outs, new_labels)   #loss on classes
     
