@@ -3,6 +3,7 @@ import torch
 
 def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classes=True):
     loss = nn.CrossEntropyLoss()
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu") 
     coarse = []
     real_superclass = [None]*len(outputs)
     #print(real_superclass)
@@ -39,10 +40,11 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     class_labels1=list(class_labels)
     outputs1=list(outputs)
     #outputs1=outputs.cuda()
-    print("labels:", type(class_labels1))
+    print("labels:", class_labels1.is_cuda)
     
     outputs1=[outputs1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
     class_labels1=[class_labels1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
+    
     
     #i=0
     #while i<len(outputs1):
