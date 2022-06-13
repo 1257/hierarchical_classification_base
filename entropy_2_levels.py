@@ -41,7 +41,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     mask = class_labels >= 0
     indices = torch.nonzero(mask)
     print("all: ", outputs)
-    print("filtered: ", outputs[indices])
+    print("filtered: ", outputs[indices][:])
     l2=loss(outputs[indices], class_labels[indices])   #loss on classes
     
     if use_superclasses and use_classes:
