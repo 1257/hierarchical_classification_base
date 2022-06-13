@@ -45,7 +45,9 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     indices = []
     indices = torch.tensor(indices)
     indices = indices.cuda()
-    indices = torch.nonzero(mask).cuda
+    if(indices.is_cuda):
+        print("indices is cuda")
+    indices = torch.nonzero(mask).cuda()
     c=len(indices)
     print("indices count:", c)
     
