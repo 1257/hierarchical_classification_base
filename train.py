@@ -71,7 +71,7 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, opti
         #print("labels", labels)
         #print("class_labels", class_labels)
         
-        loss = loss_function(outputs, labels, class_labels, use_superclasses=useSuperclasses, use_classes=useClasses)
+        loss = loss_function(outputs, labels, class_labels, useSuperclasses, useClasses)
 
         
         wandb.log({"loss": loss})
@@ -386,7 +386,7 @@ if __name__ == '__main__':
             if epoch <= resume_epoch:
                 continue
 
-        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2, useSuperclasses=False, useClasses=True) #loss_function2
+        train(cifar100_training_loader2, warmup_scheduler2, epoch, loss_function2, optimizer2, False, True) #loss_function2
         acc100, acc20 = eval_training(loss_function2, cifar100_test_loader, epoch) #loss_function2
         wandb.log({"accuracy 100": acc100})
         wandb.log({"accuracy 20": acc20})
