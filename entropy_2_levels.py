@@ -39,11 +39,14 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     
     class_labels1=list(class_labels)
     outputs1=list(outputs)
-    #outputs1=outputs.cuda()
-    print("labels:", class_labels1.is_cuda)
+    outputs1=torch.tensor(outputs1)
+    outputs1=outputs1.cuda()
+    class_labels1=torch.tensor(class_labels1)
+    class_labels1=class_labels1.cuda()
+    #print("labels:", class_labels1.is_cuda)
     
-    outputs1=[outputs1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
-    class_labels1=[class_labels1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
+    #outputs1=[outputs1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
+    #class_labels1=[class_labels1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
     
     
     #i=0
