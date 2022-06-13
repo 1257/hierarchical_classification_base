@@ -39,25 +39,26 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
             
     l1=loss(torch.tensor(coarse).cuda(), labels)    #loss on superclasses
     
-    mask = class_labels >= 0
+    mask = class_labels < 0
     indices = torch.nonzero(mask)
     
     #outs = outputs.clone()
     #outs.grad_fn.copy_(outputs.grad_fn)
-    for i in range(len(labels)):
-        if i not in indices:
-            outputs = torch.cat([outputs[:i], outputs[i+1:]])
+    
+    #for i in range(len(labels)):
+        #if i not in indices:
+            #outputs = torch.cat([outputs[:i], outputs[i+1:]])
             
     #outs.reshape([ len(indices), 100])
     #outs = (torch.tensor(outs)).cuda()
-    print("outputs size:", outputs.size())
+    #print("outputs size:", outputs.size())
     
-    print("outputs: ", outputs)
+    #print("outputs: ", outputs)
     #print("outs: ", outs)
-    new_labels = torch.tensor(class_labels[indices]).cuda()
-    new_labels = new_labels.reshape([len(indices)])
-    print("new_labels size:", new_labels.size())
-    l2=loss(outputs, new_labels)   #loss on classes
+    #new_labels = torch.tensor(class_labels[indices]).cuda()
+    #new_labels = new_labels.reshape([len(indices)])
+    #print("new_labels size:", new_labels.size())
+    l2=loss(outputs, class_labels, ignore_index = indices)   #loss on classes
     
     if use_superclasses==True and use_classes==True:
         print("loss 1 and 2:", 0.7*l1+0.3*l2)
