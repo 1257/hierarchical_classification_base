@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch
+import copy
 
 def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     loss = nn.CrossEntropyLoss()
@@ -41,7 +42,8 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     mask = class_labels >= 0
     indices = torch.nonzero(mask)
 
-    outs = outputs.clone()
+    outs = copy.deepcopy(outputs)
+    #outs = outputs.clone()
     #outs.grad_fn.copy_(outputs.grad_fn)
     for i in range(len(labels)):
         if i not in indices:
