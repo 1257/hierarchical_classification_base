@@ -10,8 +10,6 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     real_superclass = [None]*len(outputs)
     func=max
     
-    print("class_labels: ", class_labels)
-    
     for i in range(len(outputs)):
         coarse.append([])
 
@@ -42,7 +40,8 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     
     mask = class_labels >= 0
     indices = torch.nonzero(mask)
-    
+    print("all: ", outputs)
+    print("filtered: ", outputs[indices])
     l2=loss(outputs[indices], class_labels[indices])   #loss on classes
     
     if use_superclasses and use_classes:
