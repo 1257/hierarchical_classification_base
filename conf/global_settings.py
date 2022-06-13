@@ -24,7 +24,7 @@ MILESTONES = [60, 120, 160]
 
 #MILESTONES = [30, 40, 50]
 MILESTONES1 = [6, 11, 16]
-MILESTONES2 = [20, 40, 60]
+MILESTONES2 = [21, 41, 61]
 
 COMPLEX_TRAINSET_SIZE = 10000
 EXPERIMENT = "baseline" # baseline, finetune or hierarchy
