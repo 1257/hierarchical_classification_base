@@ -47,6 +47,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
         #outs[i] = outs[i][0]
     outs.reshape([ len(indices), 100])
     print("outs size:", outs.size())
+    
     print("filtered: ", outputs[indices])
     print("filtered[0]: ", outs)
     new_labels = torch.tensor(class_labels[indices]).cuda()
