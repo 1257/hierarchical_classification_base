@@ -284,8 +284,10 @@ def get_single_training_dataloader(change_to_superclasses, mean, std, batch_size
       cifar100_trainset1[i].append(cifar100_trainset1[i][1])
       cifar100_trainset1[i]=tuple(cifar100_trainset1[i])
     
+    cifar100_trainset1_1=change_labels_to_coarse(cifar100_trainset1, False) 
+    
     cifar100_training_loader1 = DataLoader(
-          cifar100_trainset1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
+          cifar100_trainset1_1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     
     return cifar100_training_loader1
   
@@ -341,7 +343,7 @@ def get_training_dataloader_with_hierarhy(is_new_set, mean, std, batch_size=16, 
     
     cifar100_global1=change_labels_to_coarse(cifar100_global, False) 
     
-    for i in range(20):
+    for i in range(00):
       print(cifar100_global[i][1], cifar100_global[i][2])  
       print(cifar100_global1[i][1], cifar100_global1[i][2])
       print()
@@ -384,7 +386,7 @@ def get_test_dataloader_with_hierarhy(mean, std, batch_size=16, num_workers=2, s
     cifar100_test_loader = DataLoader(
         cifar100_test1, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
     
-    for i in range(21):
+    for i in range(0):
       print(cifar100_test[i][1], cifar100_test[i][2])
       print(cifar100_test1[i][1], cifar100_test1[i][2])
       print()
