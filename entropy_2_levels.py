@@ -41,6 +41,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     l1=loss(torch.tensor(coarse).cuda(), labels)    #loss on superclasses
     
     mask = torch.tensor(class_labels >= 0).cuda()
+    print(class_labels >= 0)
     if(mask.is_cuda):
         print("mask is cuda")
     print(mask)
