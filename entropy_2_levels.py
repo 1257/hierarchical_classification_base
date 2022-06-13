@@ -43,7 +43,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
 
     outs = outputs.clone()
     for i in range(len(labels)):
-        if i not in indeces:
+        if i not in indices:
             outs = torch.cat([outs[:i], outs[i+1:]])
             
     #outs.reshape([ len(indices), 100])
