@@ -9,6 +9,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     real_classes = []
     real_superclass = [None]*len(outputs)
     func=max
+    print("start outputs: ", outputs)
     
     for i in range(len(outputs)):
         coarse.append([])
