@@ -1,6 +1,5 @@
 import torch.nn as nn
 import torch
-import copy
 
 def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     loss = nn.CrossEntropyLoss()
@@ -41,24 +40,23 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     
     mask = class_labels >= 0
     indices = torch.nonzero(mask)
-
-    outs = copy.deepcopy(outputs)
+    
     #outs = outputs.clone()
     #outs.grad_fn.copy_(outputs.grad_fn)
     for i in range(len(labels)):
         if i not in indices:
-            outs = torch.cat([outs[:i], outs[i+1:]])
+            outputs = torch.cat([outputs[:i], outputs[i+1:]])
             
     #outs.reshape([ len(indices), 100])
     #outs = (torch.tensor(outs)).cuda()
     print("outs size:", outs.size())
     
     print("outputs: ", outputs)
-    print("outs: ", outs)
+    #print("outs: ", outs)
     new_labels = torch.tensor(class_labels[indices]).cuda()
     new_labels = new_labels.reshape([len(indices)])
     print("new_labels size:", new_labels.size())
-    l2=loss(outs, new_labels)   #loss on classes
+    l2=loss(outputs, new_labels)   #loss on classes
     
     if use_superclasses==True and use_classes==True:
         print("loss 1 and 2:", 0.7*l1+0.3*l2)
