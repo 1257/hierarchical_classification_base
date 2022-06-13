@@ -54,8 +54,8 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     #print(outputs)
     #print(class_labels)
     
-    outs1=[outputs[i] for i in range(len(class_labels)) if class_labels[i]!=-1]
-    labs1=[class_labels[i] for i in range(len(class_labels)) if class_labels[i]!=-1]
+    outs=[outputs[i] for i in range(len(class_labels)) if class_labels[i]!=-1]
+    labs=[class_labels[i] for i in range(len(class_labels)) if class_labels[i]!=-1]
     
     #l2=loss(outputs, class_labels)
     l2=loss(outs1, labs1)
