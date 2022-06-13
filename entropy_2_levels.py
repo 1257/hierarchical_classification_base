@@ -10,7 +10,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     real_superclass = [None]*len(outputs)
     func=max
     
-    print(labels)
+    print("class_labels: ", class_labels)
     
     for i in range(len(outputs)):
         coarse.append([])
@@ -40,9 +40,10 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
             
     l1=loss(torch.tensor(coarse).cuda(), labels)    #loss on superclasses
     
-    mask = class_labels >= 0
+    mask = torch.tensor(class_labels >= 0).cuda()
     if(mask.is_cuda):
         print("mask is cuda")
+    print(mask)
     indices = []
     indices = torch.tensor(indices)
     indices = indices.cuda()
