@@ -39,8 +39,9 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     class_labels1=list(class_labels)
     outputs1=list(outputs)
     #outputs1=outputs.cuda()
+    print("labels:", class_labels1)
     
-    outputs1=[outputs[i] for i in range(len(class_labels)) if class_labels1[i]!=-1]
+    outputs1=[outputs1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
     class_labels1=[class_labels1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
     
     #i=0
