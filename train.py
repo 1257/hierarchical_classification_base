@@ -67,6 +67,8 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, opti
         optimizer.zero_grad()
         outputs = net(images)
 
+        print(outputs)
+        print(labels)
         
         loss = loss_function(outputs, labels, class_labels, use_superclasses=useSuperclasses, use_classes=useClasses)
 
