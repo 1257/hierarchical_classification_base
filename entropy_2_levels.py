@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 
-def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classes=True):
+def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     loss = nn.CrossEntropyLoss()
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu") 
     coarse = []
@@ -66,6 +66,8 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
     elif use_superclasses==True:
         print("loss 2:", l2)
         return l2
+    else:
+        print("none of parts included")
 
 
 def modifiedEntropy2lvl(outputs, labels):
