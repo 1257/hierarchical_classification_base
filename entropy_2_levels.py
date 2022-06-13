@@ -40,44 +40,10 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses=True, use_classe
             
     l1=loss(torch.tensor(coarse).cuda(), labels)    #loss on superclasses
     
-    mask = torch.tensor(class_labels >= 0).cuda()
-    print(class_labels >= 0)
-    if(mask.is_cuda):
-        print("mask is cuda")
-    print(mask)
-    indices = []
-    indices = torch.tensor(indices)
-    indices = indices.cuda()
-    if(indices.is_cuda):
-        print("indices is cuda")
-    indices = torch.nonzero(mask).cuda()
-    c=len(indices)
-    print("indices count:", c)
+    mask = class_labels >= 0
+    indices = torch.nonzero(mask)
     
-    class_labels1=list(class_labels)
-    outputs1=list(outputs)
-    print("labels:", class_labels)
-    
-    #outputs1=[outputs1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
-    #class_labels1=[class_labels1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
-    
-    
-    #i=0
-    #while i<len(outputs1):
-    #    if class_labels1[i]==-1:
-    #        class_labels1 = torch.cat([class_labels1[:i], class_labels1[i+1:]])
-    #        outputs1 = torch.cat([outputs1[:i], outputs1[i+1:]])
-    #    else:
-    #        i=i+1
-    
-    #print(outputs)
-    #print(class_labels)
-    
-    #outputs1=[outputs1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
-    #class_labels1=[class_labels1[i] for i in range(len(class_labels1)) if class_labels1[i]!=-1]
-    
-    l2=loss(outputs1, class_labels1)   #loss on classes
-    #l2=loss(outs1, labs1)
+    l2=loss(outputs[indices], class_labels[indices])   #loss on classes
     
     if use_superclasses and use_classes:
         return 0.7*l1+0.3*l2
