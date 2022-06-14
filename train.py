@@ -326,9 +326,9 @@ if __name__ == '__main__':
                 print('saving weights file to {}'.format(weights_path))
                 torch.save(net.state_dict(), weights_path)
 
-    #net.set_output_size(100)
-    #net.freeze()
-    #net=net.cuda()
+    net.set_output_size(100)
+    net.freeze()
+    net=net.cuda()
     iter_per_epoch2 = len(cifar100_training_loader2)
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer2, milestones=settings.MILESTONES1, gamma=0.2) #learning rate decay
