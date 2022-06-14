@@ -373,7 +373,6 @@ if __name__ == '__main__':
     net.conv1.requires_grad_(True)
     net.avg_pool.requires_grad_(True)
     net.fc.requires_grad_(True)
-    net.fcSuper.requires_grad_(True)
     
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer2, milestones=settings.SMALL_MILESTONES, gamma=0.2) #learning rate decay, MILESTONES
