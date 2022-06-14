@@ -382,6 +382,8 @@ if __name__ == '__main__':
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
     #print(filter(lambda x: x.requires_grad, net.parameters()))
     
+    print(net)
+    
     wandb.log({"stage": 3})
     # step 3
     for epoch in range(1, settings.EPOCH + 1):
