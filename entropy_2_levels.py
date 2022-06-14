@@ -58,8 +58,10 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     
     
     res=[outputs[i] for i in range(len(labels)) if labels[i]>=0]
-    print("result of comprehension: ", res)
-    
+    print("result size of comprehension output: ", res.size())
+    labs=[labels[i] for i in range(len(labels)) if labels[i]>=0]
+    print("labs size of comprehension output: ", labs.size())
+        
     #outs.reshape([ len(indices), 100])
     #outs = (torch.tensor(outs)).cuda()
     #print("outputs size:", outputs.size())
@@ -70,7 +72,8 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     #new_labels = new_labels.reshape([len(indices)])
     #print("new_labels size:", new_labels.size())
     #l2=loss(outputs[indices], class_labels[indices])   #loss on classes
-    l2=loss(outs1, targs1)
+    #l2=loss(outs1, targs1)
+    l2=loss(res, labs)
     
     if use_superclasses==True and use_classes==True:
         print("loss 1 and 2:", 0.7*l1+0.3*l2)
