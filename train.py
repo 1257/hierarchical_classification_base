@@ -195,7 +195,9 @@ if __name__ == '__main__':
         net=ResNet(BasicBlock, [2, 2, 2, 2], num_classes=100).cuda()
     #net.set_output_size(20)
     
-
+    wandb.log({"experiment": settings.EXPERIMENT})
+    wandb.log({"fine set size": settings.COMPLEX_TRAINSET_SIZE})
+    
     #data preprocessing:
     if settings.EXPERIMENT == "baseline":
         cifar100_training_loader2 = get_single_training_dataloader(
