@@ -72,6 +72,7 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, opti
         #print("class_labels", class_labels)
         
         loss = loss_function(outputs, labels, class_labels, useSuperclasses, useClasses)
+        print("loss:", loss)
 
         wandb.log({"loss": loss})
         loss.backward()
@@ -371,15 +372,15 @@ if __name__ == '__main__':
     net.conv3_x.requires_grad_(True)
     net.conv2_x.requires_grad_(True)
     net.conv1.requires_grad_(True)
-    net.avg_pool.requires_grad_(True)
-    net.fc.requires_grad_(True)
+    #net.avg_pool.requires_grad_(True)
+    #net.fc.requires_grad_(True)
     
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer2, milestones=settings.SMALL_MILESTONES, gamma=0.2) #learning rate decay, MILESTONES
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
     #print(filter(lambda x: x.requires_grad, net.parameters()))
     
-    print(net)
+    #print(net)
     
     wandb.log({"stage": 3})
     # step 3
