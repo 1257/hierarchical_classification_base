@@ -65,15 +65,14 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, opti
             images = images.cuda()
         
         optimizer.zero_grad()
-        outputs = net(images)
+        outputs, outputsSuper = net(images)
 
         #print("outputs", outputs)
         #print("labels", labels)
         #print("class_labels", class_labels)
         
-        loss = loss_function(outputs, labels, class_labels, useSuperclasses, useClasses)
+        loss = loss_function(outputs, outputsSuper labels, class_labels, useSuperclasses, useClasses)
 
-        
         wandb.log({"loss": loss})
         loss.backward()
         optimizer.step()
