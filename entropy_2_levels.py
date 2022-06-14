@@ -11,7 +11,7 @@ def entropy2lvl(outputs, outputsSuper, labels, class_labels, use_superclasses, u
     real_classes = []
     real_superclass = [None]*len(outputs)
     func=max
-    print("start outputs: ", outputs)
+    #print("start outputs: ", outputs)
     
     for i in range(len(outputs)):
         coarse.append([])
@@ -86,13 +86,13 @@ def entropy2lvl(outputs, outputsSuper, labels, class_labels, use_superclasses, u
         l2 = loss(outputs, class_labels)
     
     if use_superclasses==True and use_classes==True:
-        print("loss 1 and 2:", 0.7*l1+0.3*l2)
+        #print("loss 1 and 2:", 0.7*l1+0.3*l2)
         return 0.7*l1+0.3*l2
     elif use_superclasses==True:
-        print("loss 1:", l1)
+        #print("loss 1:", l1)
         return l1
     elif use_superclasses==True:
-        print("loss 2:", l2)
+        #print("loss 2:", l2)
         return l2
     else:
         print("none of parts included")
