@@ -229,7 +229,7 @@ if __name__ == '__main__':
         )
     
     #get testloader with classes and superclasses (to get accuracy at 20 and 100 classes)
-    cifar100_test_loader1 = get_test_dataloader_with_hierarhy(
+    cifar100_test_loader = get_test_dataloader_with_hierarhy(
         settings.CIFAR100_TRAIN_MEAN,
         settings.CIFAR100_TRAIN_STD,
         num_workers=4,
@@ -307,7 +307,7 @@ if __name__ == '__main__':
                     continue
 
             train(cifar100_training_loader1, warmup_scheduler1, epoch, loss_function1, optimizer1, useSuperclasses=True, useClasses=False)
-            acc100, acc20 = eval_training(loss_function1, cifar100_test_loader1, epoch)
+            acc100, acc20 = eval_training(loss_function1, cifar100_test_loader, epoch)
             wandb.log({"accuracy 100": acc100})
             wandb.log({"accuracy 20": acc20})
             wandb.log({"stage": 1})
