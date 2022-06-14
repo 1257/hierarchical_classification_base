@@ -39,7 +39,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
         coarse[i].append(func([outputs[i][81], outputs[i][69], outputs[i][41], outputs[i][89], outputs[i][85]]))
             
     print(torch.tensor(coarse))        
-    l1=loss(torch.tensor(coarse).cuda(), labels)    #loss on superclasses
+    l1=loss(torch.tensor(coarse, requires_grad=True).cuda(), labels)    #loss on superclasses
     
     mask = class_labels >= 0
     indices = torch.nonzero(mask)
