@@ -45,7 +45,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     indices = torch.nonzero(mask)
     
     outs = outputs[indices]
-    outs1 = [None]*len(indices)
+    outs1 = []*len(indices)
     
     for i in range(len(labels)):
         if i not in indices:
