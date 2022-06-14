@@ -38,32 +38,32 @@ def entropy2lvl(outputs, outputsSuper, labels, class_labels, use_superclasses, u
         coarse[i].append(func([outputs[i][8], outputs[i][58], outputs[i][90], outputs[i][13], outputs[i][48]]))
         coarse[i].append(func([outputs[i][81], outputs[i][69], outputs[i][41], outputs[i][89], outputs[i][85]]))
             
-    print(torch.tensor(coarse, requires_grad=True))        
+    #print(torch.tensor(coarse, requires_grad=True))        
     #l1=loss(torch.tensor(coarse, requires_grad=True).cuda(), labels)    #loss on superclasses
         
     mask = class_labels >= 0
     indices = torch.nonzero(mask)
     
-    outs = outputs[indices]
-    outs1 = []*len(indices)
-    targs = class_labels[indices]
-    targs1 = []*len(indices)
+    #outs = outputs[indices]
+    #outs1 = []*len(indices)
+    #targs = class_labels[indices]
+    #targs1 = []*len(indices)
     
-    for i in range(len(labels)):
-        if i not in indices:
-            outs1[i] = outs[i][0]
-            targs1[i] = targs[i][0]
-    outs1=torch.tensor(outs1).cuda()
-    targs1=torch.tensor(targs1).cuda()
+    #for i in range(len(labels)):
+    #    if i not in indices:
+    #        outs1[i] = outs[i][0]
+    #        targs1[i] = targs[i][0]
+    #outs1=torch.tensor(outs1).cuda()
+    #targs1=torch.tensor(targs1).cuda()
     
     
-    res=[outputs[i] for i in range(len(labels)) if labels[i]>=0]
+    #res=[outputs[i] for i in range(len(labels)) if labels[i]>=0]
     #res=torch.tensor(res, requires_grad=True)
-    res= torch.tensor([item.cpu().detach().numpy() for item in res]).cuda() 
-    print("result size of comprehension output: ", res.size())
-    labs=[labels[i] for i in range(len(labels)) if labels[i]>=0]
-    labs=torch.tensor(labs).cuda()
-    print("labs size of comprehension output: ", labs.size())
+    #res= torch.tensor([item.cpu().detach().numpy() for item in res]).cuda() 
+    #print("result size of comprehension output: ", res.size())
+    #labs=[labels[i] for i in range(len(labels)) if labels[i]>=0]
+    #labs=torch.tensor(labs).cuda()
+    #print("labs size of comprehension output: ", labs.size())
         
     #outs.reshape([ len(indices), 100])
     #outs = (torch.tensor(outs)).cuda()
@@ -78,10 +78,12 @@ def entropy2lvl(outputs, outputsSuper, labels, class_labels, use_superclasses, u
     #l2=loss(outs1, targs1)
     #l2=loss(res, labs)
     
+    print("superclasses: output", outputsSuper)
+    
     if use_superclasses == True:
-        l1 = loss(outputsSuper, class_labels)
+        l1 = loss(outputsSuper, labels)
     if use_classes == True:
-        l2 = loss(outputs, labels)
+        l2 = loss(outputs, class_labels)
     
     if use_superclasses==True and use_classes==True:
         print("loss 1 and 2:", 0.7*l1+0.3*l2)
