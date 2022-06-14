@@ -67,7 +67,8 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, opti
         optimizer.zero_grad()
         outputs, outputsSuper = net(images)
 
-        #print("outputs", outputs)
+        print("outputs size:", outputs.size())
+        print("outputsSuper size:", outputsSuper.size())
         #print("labels", labels)
         #print("class_labels", class_labels)
         
