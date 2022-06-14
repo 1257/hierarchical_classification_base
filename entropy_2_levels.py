@@ -1,17 +1,15 @@
 import torch.nn as nn
 import torch
 
-def entropy2lvl(outputs, outputsSuper, labels, class_labels, use_superclasses, use_classes):
+def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     indices = []
-    #loss = nn.CrossEntropyLoss(ignore_index=indices)
+    
     loss = nn.CrossEntropyLoss()
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu") 
     coarse = []
     classes = []
     real_classes = []
     real_superclass = [None]*len(outputs)
     func=max
-    #print("start outputs: ", outputs)
     
     for i in range(len(outputs)):
         coarse.append([])
@@ -81,7 +79,7 @@ def entropy2lvl(outputs, outputsSuper, labels, class_labels, use_superclasses, u
     #print("superclasses: output", outputsSuper)
     
     if use_superclasses == True:
-        l1 = loss(outputsSuper, labels)
+        l1=loss(torch.tensor(coarse, requires_grad=True).cuda(), labels)    #loss on superclasses
     if use_classes == True:
         l2 = loss(outputs, class_labels)
     
