@@ -78,7 +78,7 @@ def entropy2lvl(outputs, outputsSuper, labels, class_labels, use_superclasses, u
     #l2=loss(outs1, targs1)
     #l2=loss(res, labs)
     
-    print("superclasses: output", outputsSuper)
+    #print("superclasses: output", outputsSuper)
     
     if use_superclasses == True:
         l1 = loss(outputsSuper, labels)
