@@ -71,7 +71,7 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, opti
         #print("labels", labels)
         #print("class_labels", class_labels)
         
-        loss = loss_function(outputs, outputsSuper labels, class_labels, useSuperclasses, useClasses)
+        loss = loss_function(outputs, outputsSuper, labels, class_labels, useSuperclasses, useClasses)
 
         wandb.log({"loss": loss})
         loss.backward()
@@ -126,8 +126,8 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
             labels = labels.cuda()
             class_labels = class_labels.cuda()
 
-        outputs = net(images)
-        loss = loss_function(outputs, labels, class_labels)
+        outputs, outputsSuper = net(images)
+        loss = loss_function(outputs, outputsSuper, labels, class_labels, True, True)
 
         test_loss += loss.item()
         _, preds = outputs.max(1)
