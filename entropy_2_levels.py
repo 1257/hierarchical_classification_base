@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 
-def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
+def entropy2lvl(outputs, outputsSuper, labels, class_labels, use_superclasses, use_classes):
     indices = []
     #loss = nn.CrossEntropyLoss(ignore_index=indices)
     loss = nn.CrossEntropyLoss()
