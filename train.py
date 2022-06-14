@@ -52,7 +52,6 @@ superclass = [ 4,  1, 14,  8,  0,  #номер суперкласса соотв
                0, 17,  8, 14, 13]
 
 
-
 def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, optimizer, useClasses, useSuperclasses):
     start = time.time()
     net.train()
@@ -132,6 +131,7 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
 
         test_loss += loss.item()
         _, preds = outputs.max(1)
+        _, predsSuper = outputs.max(1) #from new output
         
         preds_super = [superclass[preds[i]] for i in range(len(preds)) if class_labels[i]!=-1]
         class_labels = [class_labels[i] for i in range(len(class_labels)) if class_labels[i]!=-1]
@@ -143,7 +143,8 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
         preds_super = preds_super.cuda()
         
         correct1 += preds.eq(torch.tensor(class_labels)).sum()
-        correct2 += preds_super.eq(torch.tensor(labels)).sum()
+        #correct2 += preds_super.eq(torch.tensor(labels)).sum()
+        correct2 += predsSuper.eq(torch.tensor(labels)).sum() #from new second output
 
         #print("real classes:", class_labels)
         #print("preds:", preds)
