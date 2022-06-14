@@ -3,7 +3,8 @@ import torch
 
 def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     indices = []
-    loss = nn.CrossEntropyLoss(ignore_index=indices)
+    #loss = nn.CrossEntropyLoss(ignore_index=indices)
+    loss = nn.CrossEntropyLoss()
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu") 
     coarse = []
     classes = []
