@@ -64,14 +64,14 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, opti
             images = images.cuda()
         
         optimizer.zero_grad()
-        outputs, outputsSuper = net(images)
+        outputs = net(images)
 
         #print("outputs size:", outputs.size())
         #print("outputsSuper size:", outputsSuper.size())
         #print("labels", labels)
         #print("class_labels", class_labels)
         
-        loss = loss_function(outputs, outputsSuper, labels, class_labels, useSuperclasses, useClasses)
+        loss = loss_function(outputs, labels, class_labels, useSuperclasses, useClasses)
 
         wandb.log({"loss": loss})
         loss.backward()
@@ -126,13 +126,12 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
             labels = labels.cuda()
             class_labels = class_labels.cuda()
 
-        outputs, outputsSuper = net(images)
-        loss = loss_function(outputs, outputsSuper, labels, class_labels, True, True)
+        outputs = net(images)
+        loss = loss_function(outputs, labels, class_labels, True, True)
 
         test_loss += loss.item()
         _, preds = outputs.max(1)
-        _, predsSuper = outputs.max(1) #from new output
-        
+                
         preds_super = [superclass[preds[i]] for i in range(len(preds)) if class_labels[i]!=-1]
         class_labels = [class_labels[i] for i in range(len(class_labels)) if class_labels[i]!=-1]
         
@@ -143,9 +142,8 @@ def eval_training(loss_function, cifar100_test_loader, epoch=0, tb=True, ):
         preds_super = preds_super.cuda()
         
         correct1 += preds.eq(torch.tensor(class_labels)).sum()
-        #correct2 += preds_super.eq(torch.tensor(labels)).sum()
-        correct2 += predsSuper.eq(torch.tensor(labels)).sum() #from new second output
-
+        correct2 += preds_super.eq(torch.tensor(labels)).sum()
+        
         #print("real classes:", class_labels)
         #print("preds:", preds)
         
