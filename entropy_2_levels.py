@@ -55,7 +55,11 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
             targs1[i] = targs[i][0]
     outs1=torch.tensor(outs1).cuda()
     targs1=torch.tensor(targs1).cuda()
-            
+    
+    
+    res=[targets[i] for i in range(len(labels)) if labels[i]>=0]
+    print("result of comprehension: ", res)
+    
     #outs.reshape([ len(indices), 100])
     #outs = (torch.tensor(outs)).cuda()
     #print("outputs size:", outputs.size())
