@@ -89,7 +89,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     elif use_superclasses==True:
         #print("loss 1:", l1)
         return l1
-    elif use_superclasses==True:
+    elif use_classes==True:
         #print("loss 2:", l2)
         return l2
     else:
