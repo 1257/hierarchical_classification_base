@@ -50,7 +50,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     for i in range(len(labels)):
         if i not in indices:
             outs1[i] = outs[i][0]
-    outs1=torch.tensor(outs1)
+    outs1=torch.tensor(outs1).cuda()
             
     #outs.reshape([ len(indices), 100])
     #outs = (torch.tensor(outs)).cuda()
