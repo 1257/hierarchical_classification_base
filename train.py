@@ -193,7 +193,8 @@ if __name__ == '__main__':
     net = get_network(args)
     if torch.cuda.is_available():
         net=ResNet(BasicBlock, [2, 2, 2, 2], num_classes=100).cuda()
-    #net.set_output_size(20)
+    
+    #print(net)
     
     wandb.log({"experiment": settings.EXPERIMENT})
     wandb.log({"fine set size": settings.COMPLEX_TRAINSET_SIZE})
@@ -327,7 +328,7 @@ if __name__ == '__main__':
 
     #net.set_output_size(100)
     #net.freeze()
-    net=net.cuda()
+    #net=net.cuda()
     iter_per_epoch2 = len(cifar100_training_loader2)
     optimizer2 = optim.SGD(filter(lambda x: x.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=5e-4)
     train_scheduler2 = optim.lr_scheduler.MultiStepLR(optimizer2, milestones=settings.MILESTONES1, gamma=0.2) #learning rate decay
@@ -380,7 +381,7 @@ if __name__ == '__main__':
     warmup_scheduler2 = WarmUpLR(optimizer2, iter_per_epoch2 * args.warm)
     #print(filter(lambda x: x.requires_grad, net.parameters()))
     
-    #print(net)
+    print(net)
     
     wandb.log({"stage": 3})
     # step 3
