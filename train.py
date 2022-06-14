@@ -79,7 +79,7 @@ def train(cifar100_training_loader, warmup_scheduler, epoch, loss_function, opti
         optimizer.step()
 
         n_iter = (epoch - 1) * len(cifar100_training_loader) + batch_index + 1
-
+        print("net childrens: ", list(net.children()))
         last_layer = list(net.children())[-1]
         for name, para in last_layer.named_parameters():
             if 'weight' in name:
