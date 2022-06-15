@@ -1,36 +1,9 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@1257 
-1257
-/
-hierarchical_classification_two_steps_learning
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-hierarchical_classification_two_steps_learning/models/resnet.py /
-@weiaicunzai
-weiaicunzai Remove trailing whitespaces
-…
-Latest commit c951900 on 29 Jul 2020
- History
- 1 contributor
-163 lines (126 sloc)  5.35 KB
-
-
 """resnet in pytorch
+
+
+
 [1] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun.
+
     Deep Residual Learning for Image Recognition
     https://arxiv.org/abs/1512.03385v1
 """
@@ -40,6 +13,7 @@ import torch.nn as nn
 
 class BasicBlock(nn.Module):
     """Basic Block for resnet 18 and resnet 34
+
     """
 
     #BasicBlock and BottleNeck block
@@ -76,6 +50,7 @@ class BasicBlock(nn.Module):
 
 class BottleNeck(nn.Module):
     """Residual block for resnet over 50 layers
+
     """
     expansion = 4
     def __init__(self, in_channels, out_channels, stride=1):
@@ -126,11 +101,13 @@ class ResNet(nn.Module):
         """make resnet layers(by layer i didnt mean this 'layer' was the
         same as a neuron netowork layer, ex. conv layer), one layer may
         contain more than one residual block
+
         Args:
             block: block type, basic block or bottle neck block
             out_channels: output depth channel number of this layer
             num_blocks: how many blocks per layer
             stride: the stride of the first block of this layer
+
         Return:
             return a resnet layer
         """
@@ -183,16 +160,4 @@ def resnet152():
     return ResNet(BottleNeck, [3, 8, 36, 3])
 
 
-© 2022 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Loading complete
+
