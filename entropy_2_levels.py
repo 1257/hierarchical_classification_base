@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 
-def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
+def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):  #outputs - тензор на выходе НС, labels - метки суперклассов, class_labels - метки классов
     indices = []
     
     loss = nn.CrossEntropyLoss()
@@ -14,7 +14,7 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     for i in range(len(outputs)):
         coarse.append([])
 
-    for i in range(len(outputs)):
+    for i in range(len(outputs)): #по максимуму/сумме выходов для классов определяю выходы для суперклассов
         coarse[i].append(func([outputs[i][72], outputs[i][4], outputs[i][95], outputs[i][30], outputs[i][55]]))
         coarse[i].append(func([outputs[i][73], outputs[i][32], outputs[i][67], outputs[i][91], outputs[i][1]]))
         coarse[i].append(func([outputs[i][92], outputs[i][70], outputs[i][82], outputs[i][54], outputs[i][62]]))
@@ -39,30 +39,37 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     #print(torch.tensor(coarse, requires_grad=True))        
     #l1=loss(torch.tensor(coarse, requires_grad=True).cuda(), labels)    #loss on superclasses
         
-    mask = class_labels >= 0
-    indices = torch.nonzero(mask)
+    #----------------------пробовал отсеить изображения без метки классов с помощью маски
     
-    #outs = outputs[indices]
+    mask = class_labels >= 0
+    indices = torch.nonzero(mask) #тут работает, получаю индексы нужных элементов батча
+    
+    #outs = outputs[indices] #вариант с простым фильтром. Вместо размерности 128х100 получается 128х1х100
+    
+    #--------------------------------------------------------------------------------------
     #outs1 = []*len(indices)
     #targs = class_labels[indices]
     #targs1 = []*len(indices)
     
-    #for i in range(len(labels)):
-    #    if i not in indices:
+    #for i in range(len(labels)): #цикл в попытке перейти к другой размерности (reshape пробовал, не пошло, он всё свел к одномерному 
+    #    if i not in indices:                                                     #массиву, при разных параметрах целевой размерности)
     #        outs1[i] = outs[i][0]
     #        targs1[i] = targs[i][0]
     #outs1=torch.tensor(outs1).cuda()
     #targs1=torch.tensor(targs1).cuda()
     
+    #пробовал также не создавать новый тензор, а удалять все неподходящие элементы через T = torch.cat([T[:i], T[i+1:]])
     
-    #res=[outputs[i] for i in range(len(labels)) if labels[i]>=0]
+    
+    #---------------------------------------------------------------------------------------------------------
+    #res=[outputs[i] for i in range(len(labels)) if labels[i]>=0]  #пробовал даже через list comprehension
     #res=torch.tensor(res, requires_grad=True)
-    #res= torch.tensor([item.cpu().detach().numpy() for item in res]).cuda() 
+    #res= torch.tensor([item.cpu().detach().numpy() for item in res]).cuda() #подглядел такое копирование многомерного массива - все равно проблемы с градиентом (итоговым)
     #print("result size of comprehension output: ", res.size())
     #labs=[labels[i] for i in range(len(labels)) if labels[i]>=0]
     #labs=torch.tensor(labs).cuda()
     #print("labs size of comprehension output: ", labs.size())
-        
+    
     #outs.reshape([ len(indices), 100])
     #outs = (torch.tensor(outs)).cuda()
     #print("outputs size:", outputs.size())
@@ -72,6 +79,8 @@ def entropy2lvl(outputs, labels, class_labels, use_superclasses, use_classes):
     #new_labels = torch.tensor(class_labels[indices]).cuda()
     #new_labels = new_labels.reshape([len(indices)])
     #print("new_labels size:", new_labels.size())
+    
+    
     #l2=loss(outputs[indices], class_labels[indices])   #loss on classes
     #l2=loss(outs1, targs1)
     #l2=loss(res, labs)
